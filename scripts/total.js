@@ -162,5 +162,16 @@ $(function(){
 	CTimer = setInterval(function(){
 			timing();
 		},1000);
+		
+    /* 商品上移效果 */
+	var $upimg =$("#miaogood img");
+	var position =$upimg.css("bottom");
+	$(".moveup").hover(function(){
+		var position1 = parseInt(position)+4;
+		position1 = position1+"px";
+		$(this).closest("dl").find("img").animate({bottom:position1},600);
+	},function(){
+		$(this).closest("dl").find("img").stop(true,true).animate({bottom:position},600);
+	})
 	
 });

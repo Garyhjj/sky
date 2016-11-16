@@ -585,8 +585,11 @@ body{
 }
 
 /* 秒杀 */
-
 div#miao{
+	background-color:#FFF;
+	width:1200px;
+}
+div#miaotime{
 	background-color:#F00;
 	width:1150px;
 	font-size:28px;
@@ -594,14 +597,14 @@ div#miao{
 	padding-left:50px;
 	
 }
-div#miao span{
+div#miaotime span{
 	font-size:13px;
 	padding:0 15px;
 }
-div#miao a{
+div#miaotime a{
 	color:#FFF;
 }
-div#miao a:hover{
+div#miaotime a:hover{
 	text-decoration:none;
 }
 span#showtime{
@@ -625,4 +628,66 @@ span#showtime >span{
 }
 span#showtime span{
 	padding:0;
+}
+div#miaogood{
+	background-color:#FFF;
+	height:240px;
+	padding:10px 0;
+}
+div#miao dl{
+	float:left;
+	width:200px;
+	border-right:#CCC solid 1px;
+}
+div#miao dl#miaoPin{
+	width:190px;
+}
+div#miao dl.miaolast{
+	border-right:none;
+}
+div#miao dt{
+	height:160px;
+	background:url(../images/%E4%BD%8E%E9%9D%A2%E8%A1%AC%E6%89%98.png) no-repeat bottom;
+	position:relative;
+}
+div#miao dt img{
+	position:absolute;
+	bottom:10px;
+	left:20px;;
+}
+div.smalltip{
+	background:url(../images/%E5%B7%A6%E4%B8%8A%E6%A0%87%E7%AD%BE.png) no-repeat top;
+	width:45px;
+	height:45px;
+	text-indent:10px;
+	padding-top:5px;
+	color:#FFF;
+	
+}
+div.smalltip span{
+	display:block;
+	margin-left:6px;
+}
+#miaogood a { 
+	color:#999;
+	font-size:12px;
+}
+#miaogood a:hover { 
+	color:#c81623;
+	text-decoration:none;	 
+}
+#miaogood dd{
+	margin-bottom:10px;
+	padding:0 8px;
+}
+#miaogood dd.miaoprice{
+	color:#F00;
+	font-size:16px;
+	font-weight:700;
+}
+#miaogood dd.miaoprice span{
+	margin-left:8px;
+	color:#999;
+	font-size:12px;
+	text-decoration: line-through;
 }
