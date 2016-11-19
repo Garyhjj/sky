@@ -1,13 +1,20 @@
 // JavaScript Document
+window.onload =function(){
+	if(sessionStorage.loca){
+	    $("#location >a").text(sessionStorage.loca);
+	}
+}
 $(function(){
 	
 /*定位效果*/
+
 
     $("#location em").click(function(){
 		var text = $(this).text();
 		text ="位置："+text;
 		$("#location >a").text(text);
 		$("#location .jnNav").hide() ;
+		sessionStorage.loca = text;
 	})
 	
 /*导航效果*/
