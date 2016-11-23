@@ -177,8 +177,10 @@ $(function(){
 		var position1 = parseInt(position)+4;
 		position1 = position1+"px";
 		$(this).closest("dl").find("img").animate({bottom:position1},600);
+		$(this).closest("dl").find("dd a").addClass("selected");
 	},function(){
 		$(this).closest("dl").find("img").stop(true,true).animate({bottom:position},600);
+		$(this).closest("dl").find("dd a").removeClass("selected");
 	})
 	
 });

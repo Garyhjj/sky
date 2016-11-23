@@ -676,6 +676,9 @@ div.smalltip span{
 	color:#c81623;
 	text-decoration:none;	 
 }
+#miaogood a.selected{
+	color:#c81623;
+}
 #miaogood dd{
 	margin-bottom:10px;
 	padding:0 8px;
