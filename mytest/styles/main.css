@@ -155,8 +155,11 @@ li#last{
 .addM a:hover{
 	text-decoration:none;
 }
+input:disabled{
+	background:#FFF;
+}
 
-/*内容样式开始*/
+/*脚部样式开始*/
 #footer{
 	background-color:#6C0;
 	width:336px;
