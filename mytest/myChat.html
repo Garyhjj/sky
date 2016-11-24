@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>We Chat</title>
+<link type="text/css" href="styles/basic.css" rel="stylesheet" />
+<link type="text/css" href="styles/main.css" rel="stylesheet" />
+<script type="text/javascript" src="scripts/jquery.js"></script>
+</head>
+
+<body>
+
+<div id="header">
+  <div id="back"></div>
+  <div id="top">
+    <p>个人信息</p>
+  </div>
+  <div id="more"></div>
+  </div>
+
+<div id="content">
+  <form>
+  <div id="picture" class="white">
+    <label for="pict">头&#12288;&#12288;像</label>
+    <input type="text" name="pict" id="pict" placeholder="自动获取微信头像" disabled="disabled"/>
+    <a href="#"><img src="img/pict.png" alt="your portrait" /></a>
+    
+  </div>
+  
+  <div id="weNum" class="white four">
+      <label for="weNu">微<span>信</span><span>号</span></label>
+      <input type="text" name="weNu" id="weNu" placeholder="自动获取" disabled="disabled"/>
+  </div>
+
+  
+  <div id="name" class="white four">
+    <label for="nam">姓&#12288;&#12288;名</label>
+    <input type="text" name="nam" id="nam" placeholder="填写个人姓名" />
+    <a href="#" class="get"></a>
+  
+  </div>
+  
+  <div id="sex" class="white four">
+    <label for="se">性&#12288;&#12288;别</label>
+    <input type="text" name="se" id="se" placeholder="性别选择" >
+  </div>
+  
+  <div id="tel" class="white four">
+    <label for="te">手机号码</label>
+    <input type="text" name="te" id="te" placeholder="填写个人姓名" />
+    <a href="#" class="get"></a>
+  </div>
+  
+  <div id="addr" class="white four">
+    <div id="la">
+      <label>地&#12288;&#12288;址</label>
+    </div>
+    <div id="addrUl">
+      <ul>
+        <li><input type="text" placeholder="省份选择" disabled="disabled" /></li>
+        <li><input type="text" placeholder="城市选择" disabled="disabled" /></li>
+        <li id="last"><input type="text" placeholder="城区选择" disabled="disabled" /></li>
+      </ul>
+    </div>
+    
+    <div id="address">
+
+      <input type="text" placeholder="详细地址" />
+    </div>
+  
+  </div>
+  </form>
+  <div class="four white addM" id="topOne">
+    <div><a href="#">关于靓象顾问</a></div>
+  
+  </div>
+  <div class="four white addM">
+    <div><a href="#">退出</a></div>
+  
+  </div>
+  
+
+</div>
+
+<div id="footer">
+  <div id="footNav">
+      <ul>
+        <li id="myCenter" class="selected"><span><a href="#">个人中心</a></span></li>
+        <li id="myClient"><span><a href="#">我的客户</a></span></li>
+        <li id="myOrder"><span><a href="#">我的订单</a></span></li>
+        <li id="twoDim"><span><a href="#">二维码</a></span></li>
+      </ul>
+    </div>
+
+</div>
+
+
+   <script type="text/javascript" src="scripts/total.js" /></script>
+</body>
+</html>
