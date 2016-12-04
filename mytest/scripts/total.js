@@ -16,13 +16,13 @@ function loadXMLDoc()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-			document.getElementById("myDiv").innerHTML="xmlhttp.responseText";
+			alert('21653');
 		}
 	}
 	xmlhttp.open("GET","user.json",true);
 	xmlhttp.send();
-}
-
+};
+window.onload=loadXMLDoc();
 $(function(){
 
 /*定位效果*/
