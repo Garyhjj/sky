@@ -18,7 +18,7 @@ function loadXMLDoc()
 		{
 			alert(xmlhttp.responseText+'');
 			var json = eval('(' + xmlhttp.responseText + ')');
-			alert(json.name)
+			alert(json[1].name)
 		}
 	}
 	xmlhttp.open("GET","user.json",true);
