@@ -17,6 +17,8 @@ function loadXMLDoc()
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			alert(xmlhttp.responseText+'');
+			var json = eval('(' + xmlhttp.responseText + ')');
+			alert(json.name)
 		}
 	}
 	xmlhttp.open("GET","user.json",true);
