@@ -1,4 +1,27 @@
 // JavaScript Document
+function loadXMLDoc()
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{
+		//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{
+		// IE6, IE5 浏览器执行代码
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			document.getElementById("myDiv").innerHTML="xmlhttp.responseText";
+		}
+	}
+	xmlhttp.open("GET","user.json",true);
+	xmlhttp.send();
+}
 
 $(function(){
 
@@ -22,22 +45,7 @@ $(function(){
 	 	}
 	 });
 
-	 function funSearch() {
-var fso, ts, s;
-var ForReading = 1;
-try{
-fso = new ActiveXObject("Scripting.FileSystemObject");
-      ts = fso.OpenTextFile("user.json", ForReading);
-      s = ts.ReadLine();
-      var json = eval('(' + s + ')');
-      alert(json.MyData[0].id);
-}catch(err){
 
-
-}finally{
-ts.Close();
-}
-}
 
 funSearch();
 });
