@@ -16,7 +16,7 @@ function loadXMLDoc()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-			alert('21653');
+			alert(xmlhttp.responseText+'');
 		}
 	}
 	xmlhttp.open("GET","user.json",true);
