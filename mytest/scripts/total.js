@@ -21,4 +21,23 @@ $(function(){
 	 		alert("error");
 	 	}
 	 });
+
+	 function funSearch() {
+var fso, ts, s;
+var ForReading = 1;
+try{
+fso = new ActiveXObject("Scripting.FileSystemObject");
+      ts = fso.OpenTextFile("user.json", ForReading);
+      s = ts.ReadLine();
+      var json = eval('(' + s + ')');
+      alert(json.MyData[0].id);
+}catch(err){
+
+
+}finally{
+ts.Close();
+}
+}
+
+funSearch();
 });
