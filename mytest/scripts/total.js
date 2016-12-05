@@ -16,15 +16,12 @@ function loadXMLDoc()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-			alert(xmlhttp.responseText+'');
 			var json = eval('(' + xmlhttp.responseText + ')');
-			alert(json[1].name)
 		}
 	}
 	xmlhttp.open("GET","user.json",true);
 	xmlhttp.send();
 };
-window.onload=loadXMLDoc();
 $(function(){
 
 /*定位效果*/
