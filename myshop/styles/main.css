@@ -2,18 +2,18 @@
 
 body{
 	background-color:#F5F5F5;
-	
+
 }
 #header{
 	height:165px;
 }
-#header a { 
+#header a {
 	color:#999;
 	font-size:12px;
 }
-#header a:hover { 
+#header a:hover {
 	color:#c81623;
-	text-decoration:none;	 
+	text-decoration:none;
 }
 /*导航样式开始*/
 .mainNav {
@@ -32,28 +32,28 @@ body{
     margin-right: 50px;
 	position:relative;
 	padding-left:400px;
-	
+
 }
 
-.mainNav ul li { 
-	float:left; 
+.mainNav ul li {
+	float:left;
     display: inline;
 	position: relative ;
 	z-index:100;
 	border-right: 1px solid #CCCCCC;
 }
-.mainNav ul li a { 
+.mainNav ul li a {
 	display:block;
-	padding:0 8px 0 16px; 
+	padding:0 8px 0 16px;
 	color:#999;
 	margin-right:8px;
 	font-size:12px;
 }
-.mainNav ul li a:hover { 
+.mainNav ul li a:hover {
 	background:none;
 	color:#c81623;
 	text-decoration:none;
-	 
+
 }
 #location{
 	border-right:none;
@@ -109,7 +109,7 @@ body{
 #lastli .subitem dl.four{
 	width:280px;
 }
-	
+
 .jnNav .subitem dl {
     border-top: 1px dashed #C4C4C4;
     overflow: hidden;
@@ -286,7 +286,7 @@ body{
 	position:absolute;
 	top:110px;
 	left:280px;
-	
+
 }
 #smallNav li{
 	float:left;
@@ -343,7 +343,7 @@ body{
 	padding-left:8px;
 	color:#FFF;
 	letter-spacing:3px;
-	
+
 }
 #bigNav li.selected{
 	background-color:#CCC;
@@ -352,15 +352,15 @@ body{
 #bigNav li a{
 	color:#FFF;
 	font-size:14px;
-	
+
 }
-#bigNav dl a { 
+#bigNav dl a {
 	color:#999;
 	font-size:12px;
 }
-#bigNav a:hover { 
+#bigNav a:hover {
 	color:#c81623;
-	text-decoration:none;	 
+	text-decoration:none;
 }
 #bigNav .jnNav{
 	left:200px;
@@ -376,7 +376,7 @@ body{
 }
 #bigNav dt{
 	width:100px;
-	font-size:14px;	
+	font-size:14px;
 	margin-top:5px;
 }
 #bigNav dd{
@@ -464,7 +464,7 @@ body{
 	top:4px;
 	width:189px;
 	height:473px;
-	background:#FFF;	
+	background:#FFF;
 }
 #login{
 	border-bottom:1px solid #CCC;
@@ -482,7 +482,7 @@ body{
 #login dt{
 	float:left;
 	margin-right:12px;
-	
+
 }
 #login dd{
 	float:left;
@@ -504,7 +504,7 @@ body{
 	color:#c81623;
 	text-decoration:none;
 }
-	
+
 #loginUl {
 	position:absolute;
 	top:65px;
@@ -595,7 +595,7 @@ div#miaotime{
 	font-size:28px;
 	color:#FFF;
 	padding-left:50px;
-	
+
 }
 div#miaotime span{
 	font-size:13px;
@@ -610,14 +610,14 @@ div#miaotime a:hover{
 span#showtime{
 	margin-top:10px;
 	float:right;
-	
+
 }
 span#showtime .alltime{
 	background-color:#603;
 	padding:5px;
 	font-size:17px;
 	margin:0 4px;
-	
+
 	color:#F00;
 }
 span#showtime >span{
@@ -662,19 +662,19 @@ div.smalltip{
 	text-indent:10px;
 	padding-top:5px;
 	color:#FFF;
-	
+
 }
 div.smalltip span{
 	display:block;
 	margin-left:6px;
 }
-#miaogood a { 
+#miaogood a {
 	color:#999;
 	font-size:12px;
 }
-#miaogood a:hover { 
+#miaogood a:hover {
 	color:#c81623;
-	text-decoration:none;	 
+	text-decoration:none;
 }
 #miaogood a.selected{
 	color:#c81623;
@@ -693,4 +693,44 @@ div.smalltip span{
 	color:#999;
 	font-size:12px;
 	text-decoration: line-through;
+}
+
+.pager {
+	overflow: hidden;
+	margin: 20px auto 200px;
+	width: 1000px;
+}
+.page-info,.page-nav {
+	float:right;
+}
+.pager a {
+	padding: 0 14px;
+	margin-right:5px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	text-decoration: none;
+	color:#333;
+	font-size: 13px;
+	height: 34px;
+	line-height: 34px;
+	display: inline-block;
+}
+
+.pager a.active {
+	background-color: #f7f7f7;
+	color:#e4393c;
+	border:none;
+	cursor: default;
+}
+.pager a.disable {
+	background-color: #f7f7f7;
+	color:#999;
+	cursor: default;
+}
+.pager input {
+	height: 28px;
+	padding: 3px;
+	width: 40px;
+	border: 1px solid #ddd;
+
 }
