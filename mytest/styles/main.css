@@ -116,20 +116,21 @@ a.get{
 
 }
 #addr ul {
-	width:100%;
+	margin-right: -1%;
 }
 #addr li{
 	float:left;
-	width:33%;
+	width:32%;
 	height:50px;
 	background:#FFF;
+	margin-right: 1%;
 }
 #addr li input{
 	width:90%;
 	height:30px;
 }
 li#last{
-	width:34%;
+	width:33%;
 }
 #address{
 	float:left;
