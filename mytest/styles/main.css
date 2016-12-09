@@ -3,28 +3,29 @@
 
 body{
 	background-color:#F5F5F5;
-	
+	font-size: 100%；
+
 }
 
 /*头部样式开始*/
 
 div#header{
 	margin:0 auto;
-	width:336px;
+	width:25%;
 	height:43px;
 	progid:DXImageTransform.Microsoft.Gradient(startColorStr='#6F0',endColorStr='#F90',gradientType='1');
     background: -moz-linear-gradient(left, #6F0,#F90);
     background: -o-linear-gradient(left,#6F0,#F90);
     background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#6F0), to(#F90));
 	color:#FFF;
-	font-size:18px;
+	font-size:1.5em;
 	font-weight:600;
 	position:relative;
 	overflow:hidden;
 }
 #top{
 	position:absolute;
-	left:42%;
+	left:41%;
 	top:26%;
 }
 #more{
@@ -32,16 +33,16 @@ div#header{
 	background: url(../img/bullets-black.png) no-repeat;
 	height:15px;
     width:15px;
-	left:8px;
-	top:18px;
+	left:2%;
+	top:42%;
 }
 #back{
 	position:absolute;
 	background:url(../img/action-black.png) no-repeat;
 	height:15px;
     width:15px;
-	left:310px;
-	top:18px;
+	left:94%;
+	top:42%;
 }
 
 /*内容样式开始*/
@@ -50,7 +51,7 @@ div#header{
 }
 div.white{
 	background-color:#FFF;
-	width:336px;
+	width:25%;
 	margin:0 auto;
 }
 #picture{
@@ -58,17 +59,17 @@ div.white{
 }
 #picture a{
 	float:right;
-	margin-right:10px;
+	margin-right:2%;
 	margin-top:5px;
 }
 #picture input,label{
 	border:none;
-	font-size:16px;
+	font-size:1.4em;
 	margin-top:20px;
-	margin-left:10px;
+	margin-left:2%;
 }
 #picture input{
-	width:160px;
+	width:48%;
 }
 input:focus{
 	outline: 0;
@@ -79,13 +80,13 @@ div.four{
 	margin-top:3px;
 }
 #weNum span{
-	margin-left:8px;
+	margin-left:1%;
 }
 div.four input,label{
 	border:none;
-	font-size:16px;
+	font-size:1.4em;
 	margin-top:15px;
-	margin-left:10px;
+	margin-left:1%;
 }
 a.get{
 	height:15px;
@@ -93,18 +94,17 @@ a.get{
 	background:url(../img/carat-r-black.png) no-repeat;
 	float:right;
 	margin-top:20px;
-	margin-right:8px;
+	margin-right:1%;
 }
 #addr{
 	height:103px;
 	background-color:#F5F5F5;
-	overflow:hidden;
-	width:340px;
+	width:25%;
 }
 #la{
 	height:103px;
-	margin-right:3px;
-	width:80px;
+	margin-right:1%;
+	width:24%;
 	float:left;
 	background:#FFF;
 }
@@ -112,45 +112,48 @@ a.get{
 	float:left;
 	background-color:#F5F5F5;
 	height:50px;
+	width:75%
 }
 #addrUl{
 	background-color:#F5F5F5;
 
 }
+#addr ul {
+	width:100%;
+}
 #addr li{
 	float:left;
-	width:82px;
-	margin-right:3px;
+	width:33%;
 	height:50px;
 	background:#FFF;
 }
 #addr li input{
-	width:63px;
+	width:90%;
+	height:30px;
 }
 li#last{
-	margin-right:none;
-	width:84px;
+	width:34%;
 }
 #address{
 	float:left;
 	background:#FFF;
 	height:50px;
 	margin-top:3px;
-	width:253px;
+	width:75%;
 }
 #topOne{
 	margin-top:20px;
 }
 .addM a{
 	color:#000;
-	font-size:16px;
-	
+	font-size:1.4em;
+
 }
 .addM div{
 	height:18px;
 	margin-top:12px;
 	float:left;
-	margin-left:10px;
+	margin-left:3%;
 }
 .addM a:hover{
 	text-decoration:none;
@@ -162,29 +165,32 @@ input:disabled{
 /*脚部样式开始*/
 #footer{
 	background-color:#6C0;
-	width:336px;
+	width:25%;
 	margin:0 auto;
 	height:60px;
 	color:#FFF;
 	font-weight: bold;
+	position: relative;
 }
 #footer ul{
 	float:left;
+	width:100%;
 }
 #footer li{
 	float:left;
-	width:84px;
+	width:25%;
 	height:60px;
 	cursor:pointer;
+	position: relative;
 }
 #footer li.selected{
 	background-color:#6F0;
-
 }
 #footer li span{
-	float:left;
-	margin-top:36px;
-	margin-left:20px;
+	position: absolute;
+	top:36px;
+	left:50%;
+	margin-left: -26px;
 }
 #footer li span a{
 	color:#FFF;
@@ -203,4 +209,24 @@ input:disabled{
 }
 #twoDim{
 	background:url(../img/calendar-black.png) no-repeat center;
+}
+
+@media screen and (max-width:1180px) {
+	#footer,#addr,div.white,div#header{width:30%;}
+}
+@media screen and (max-width:990px) {
+	#footer,#addr,div.white,div#header{width:35%;}
+}
+@media screen and (max-width:850px) {
+	#footer,#addr,div.white,div#header{width:40%;}
+}
+@media screen and (max-width:760px) {
+	#footer,#addr,div.white,div#header{width:100%;}
+	#footer{
+		position: fixed;
+		bottom: 0;
+	}
+	#MotoL{
+		margin-bottom: 60px;
+	}
 }
