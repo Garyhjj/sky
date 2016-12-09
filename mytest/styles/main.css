@@ -79,9 +79,6 @@ div.four{
 	height:50px;
 	margin-top:3px;
 }
-#weNum span{
-	margin-left:1%;
-}
 div.four input,label{
 	border:none;
 	font-size:1.4em;
@@ -229,4 +226,7 @@ input:disabled{
 	#MotoL{
 		margin-bottom: 60px;
 	}
+}
+@media screen and (max-width:320px) {
+	#footer,#addr,div.white,div#header{width:320px;}
 }
