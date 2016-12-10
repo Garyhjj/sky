@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/vue/dist/vue.js">
+    </script>
+    <title>图片浏览模块(vue)</title>
+</head>
+<style media="screen">
+    body,
+    div,
+    ul,
+    li,
+    img {
+        margin: 0 auto;
+        padding: 0px;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    ul,
+    li {
+        list-style: none;
+    }
+
+    .imgList {
+        width: 1200px;
+        overflow: hidden;
+    }
+
+    .imgList ul {
+        margin-right: -20px;
+    }
+
+    .imgList li {
+        width: 285px;
+        height: 300px;
+        margin-right: 20px;
+        float: left;
+        margin-top: 20px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: all .8s;
+    }
+
+    .imgList li:hover {
+        transform: translateY(-10px);
+    }
+
+    .imgList li img {
+        width: 280px;
+        height: 300px;
+        transition: all .8s;
+    }
+
+    .imgList li img:hover {
+        transform: scale(1.5, 1.5);
+    }
+
+    .layer {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 90%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .hide{
+      display: none;
+    }
+
+    .showImg {
+        width: 80%;
+        height: 100%;
+        min-width: 955px;
+        position: relative;
+        text-align: center;
+        top:-5%;
+    }
+    .showImg .prev{
+      position: absolute;
+      left:-62px;
+      top:50%;
+      background-color: #f7f7f7;
+      opacity: 0.5;
+      transition: all .8s;
+    }
+    .showImg .next{
+      position: absolute;
+      right:-62px;
+      top:50%;
+      background-color: #f7f7f7;
+      opacity: 0.5;
+      transition: all .8s;
+    }
+    .showImg .prev:hover,.showImg .next:hover{
+      opacity: 0.8;
+    }
+
+    .showImg .image{
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+</style>
+
+<body>
+    <div class="imgList">
+        <ul id="imgList">
+            <li><img :src="list[0]" alt=""  @click="showLayer(list[0],'0')" /></li>
+            <li><img :src="list[1]" alt=""  @click="showLayer(list[1],'1')" /></li>
+            <li><img :src="list[2]" alt=""  @click="showLayer(list[2],'2')" /></li>
+            <li><img :src="list[3]" alt=""  @click="showLayer(list[3],'3')" /></li>
+            <li><img :src="list[4]" alt=""  @click="showLayer(list[4],'4')" /></li>
+            <li><img :src="list[5]" alt=""  @click="showLayer(list[5],'5')" /></li>
+            <li><img :src="list[6]" alt=""  @click="showLayer(list[6],'6')" /></li>
+            <li><img :src="list[7]" alt=""  @click="showLayer(list[7],'7')" /></li>
+        </ul>
+    </div>
+    <div class="layer" :class="{hide: isHide}" id="layer" @click="hidden">
+        <div class="showImg">
+            <a class="prev" href="javascript:;" @click="showPrev"><img src="images/prev.png" alt="" /></a>
+            <a class="next" href="javascript:;" @click="showNext"><img src="images/next.png" alt="" /></a>
+            <img :src="image" / class="image" :data-index="currIndex">
+        </div>
+    </div>
+    <div id="example-2">
+      <simple-counter></simple-counter>
+      <simple-counter></simple-counter>
+      <simple-counter></simple-counter>
+    </div>
+
+</body>
+<script type="text/javascript">
+var app1 = new Vue({
+  el: '#imgList',
+  data(){
+    return{
+      list:[
+        'images/0.jpg',
+        'images/1.jpg',
+        'images/2.jpg',
+        'images/3.jpg',
+        'images/4.jpg',
+        'images/5.jpg',
+        'images/6.jpg',
+        'images/7.jpg',
+      ],
+    }
+  },
+  methods:{
+    showLayer(img,n){
+      app2.isHide= false;
+      app2.image=img;
+      app2.currIndex=n;
+    }
+  },
+});
+
+var app2 =new Vue({
+  el:"#layer",
+  data(){
+    return{
+      isHide:true,
+      image:"images/1.jpg",
+      currIndex:""
+    }
+  },
+  methods:{
+    hidden(){
+      this.isHide=true;
+    },
+    showPrev(event){
+      this.currIndex = Number(this.currIndex);
+      var preImg= this.currIndex === 0? (app1.list.length-1): (this.currIndex - 1);
+      if(!preImg){
+        preImg =0;
+      }
+      this.image = app1.list[preImg];
+      this.currIndex =preImg;
+      event.stopPropagation();
+    },
+    showNext(event){
+      this.currIndex = Number(this.currIndex);
+      var nextImg= this.currIndex === app1.list.length? 0: (this.currIndex + 1);
+      if(!nextImg){
+        nextImg =0;
+      }
+      this.image = app1.list[nextImg];
+      this.currIndex =nextImg;
+      event.stopPropagation();
+    }
+  }
+})
+
+</script>
+</html>
