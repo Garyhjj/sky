@@ -1,0 +1,276 @@
+html, body {
+    font-family: '微软雅黑';
+    font-size: 14px;
+    background: #fff;
+}
+html, body, h1, h2, h3, h4, h5, h6, ul, li, div, p {
+    padding: 0px;
+    margin: 0px;
+}
+ul,li {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    color: @main;
+}
+.clearfix:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.clearfix {
+    height:1%;
+}
+
+
+@main: #e4393c; // 主颜色
+@border: #c5c5c5; // 边框色
+@back: #eaeaea; // 背景色
+
+.header {
+    padding: 15px 0 10px;
+    width: 1200px;
+    margin: 0 auto;
+    .cart-search {
+        float: right;
+        border: 2px solid #c91623;
+        background: #c91623;
+        height: 24px;
+        margin-top: 20px;
+        overflow: hidden;
+        .itext {
+            border: 0;
+            line-height: 18px;
+            width: 260px;
+            padding: 3px 5px;
+        }
+        .button {
+            border: none;
+            display: inline-block;
+            vertical-align: top;
+            width: 48px;
+            height: 22px;
+            background: #c91623;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+            -webkit-appearance: none;
+        }
+    }
+    .logo-1024 {
+        .logo {
+            display: block;
+            width: 270px;
+            height: 60px;
+            background: url(../img/logo.png) no-repeat 0 0;
+        }
+        .link {
+            display: block;
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            line-height: 99em;
+            top: 0;
+            right: 0;
+            background: url(http://misc.360buyimg.com/user/cart/widget/header-2015/i/cart-icon.png) #fff no-repeat;
+        }
+        float: left;
+        position: relative;
+        width: 270px;
+        padding: 0;
+    }
+}
+
+.box {
+    width: 1200px;
+    margin: 0 auto;
+    h1{
+        font-size: 40px;
+        color: @main;
+        padding: 10px 0px;
+        border-bottom: 10px solid @main;
+    }
+    header{
+        width: 100%;
+        display: block;
+        height: 44px;
+        line-height: 36px;
+        margin: 0 0 10px;
+        padding: 5px 0;
+        background: #f3f3f3;
+        border: 1px solid #e9e9e9;
+        .all {
+            width: 10%;
+            input {
+                margin-left: 54px;
+            }
+        }
+        .pro-info {
+            width: 50%;
+        }
+        .price {
+            width: 10%;
+        }
+        .num {
+            width: 10%;
+        }
+        .money {
+            width: 10%;
+        }
+        .control {
+            width: 10%;
+        }
+        ul li{
+            float: left;
+            font-size: 16px;
+        }
+    }
+
+}
+.pro-list {
+    width: 1200px;
+    margin: 0 auto;
+    ul {
+        box-sizing: border-box;
+    }
+    li {
+        border: 1px solid @border;
+        padding: 10px 0px;
+        background: @back;
+        margin-bottom: 10px;
+    }
+    .checkbox {
+        width: 10%;
+        text-align: center;
+        vertical-align: middle;
+        input {
+            display: inline-block;
+            margin-top: 40px;
+
+        }
+    }
+    .pro-info {
+        width: 50%;
+        img {
+            width: 100px;
+            height: 100px;
+            float: left;
+        }
+        .pro-text {
+            margin-left:20px;
+            p:first-child {
+                font-size: 18px;
+            }
+            p:last-child {
+                font-size: 16px;
+                margin-top: 10px;
+            }
+        }
+    }
+    .price {
+        width: 10%;
+        p:first-child {
+            color: @border;
+            text-decoration: line-through;
+        }
+    }
+    .num {
+        width: 10%;
+        input{
+            width: 42px;
+            text-align: center;
+        }
+        button {
+            border: 1px solid #cacbcb;
+            height: 18px;
+            line-height: 18px;
+            padding: 1px 0;
+            width: 16px;
+            text-align: center;
+            color: #666;
+            margin: 0;
+            background: #fff;
+        }
+    }
+    .money {
+        width: 10%;
+    }
+    .control {
+        width: 10%;
+    }
+    ul li div{
+        float: left;
+    }
+}
+.clear {
+    height: 60px;
+    line-height: 60px;
+    border: 1px solid @border;
+    background-color: @back;
+    margin-bottom: 100px;
+    .left {
+        float: left;
+        .all {
+            float: left;
+            input {
+                margin-left: 49px;
+            }
+        }
+        .del {
+            float: left;
+            margin-left: 25px;
+            button {
+                margin-right: 10px;
+            }
+        }
+    }
+    .right {
+        div {
+            float: right;
+            margin-left: 20px;
+        }
+        .total-price span{
+            color: @main;
+            font-size: 18px;
+        }
+        height: 100%;
+        float: right;
+        a {
+            float: right;
+            margin-left: 20px;
+            display: block;
+            width: 96px;
+            height: 100%;
+            line-height: 52px;
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
+            font-family: "Microsoft YaHei";
+            background: #e54346;
+            overflow: hidden;
+        }
+    }
+}
+
+.cart-empty {
+  height: 98px;
+  padding: 80px 0 120px;
+  color: #333;
+  .message {
+    ul {
+      padding-top: 23px;
+      li {
+        font-size: 14px;
+      }
+    }
+    height: 98px;
+    padding-left: 341px;
+    background: url(//misc.360buyimg.com/user/cart/css/i/no-login-icon.png) 250px 22px no-repeat;
+  }
+}

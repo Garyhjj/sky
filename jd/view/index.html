@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <link rel="stylesheet" href="../css/css.css" media="screen" title="no title">
+        <meta name="name" content="content">
+    </head>
+    <body>
+        <div class="header clearfix">
+            <div class="logo-1024">
+                <a class="logo" href=""></a>
+                <a class="link" href=""><b></b></a>
+            </div>
+            <div class="cart-search">
+                <input class="itext" type="text" name="name" value="" placeholder="自营">
+                <input class="button" type="button" value="搜索">
+            </div>
+        </div>
+        <!-- 组件模板化 -->
+        <section class="box" id="buyCar">
+            <template id="my-buygoods" v-if='goods.length'>
+                <header class="clearfix">
+                    <ul>
+                        <li class="all">
+                            <input type="checkbox" name="name" value="" id="allselect1" @click='selectAll' :checked='check1'>
+                            <label for="all">全选</label>
+                        </li>
+                        <li class="pro-info">商品信息</li>
+                        <li class="price">单价</li>
+                        <li class="num">数量</li>
+                        <li class="money">金额</li>
+                        <li class="control">操作</li>
+                    </ul>
+                </header>
+                <div class="pro-list" v-for="item in goods">
+                    <ul>
+                        <li class="clearfix">
+                            <div class="checkbox">
+                                <input type="checkbox" id="{{ $index }}" value="{{ $index }}" :checked='item.checked' @change = 'checkClick($index)'>
+                            </div>
+                            <div class="pro-info clearfix">
+                                <img :src="item.goodsImg" alt="">
+                                <div class="pro-text">
+                                    <p>{{item.goosTitle}}</p>
+                                    <p>规格：<span>{{item.size}}</span></p>
+                                </div>
+                            </div>
+                            <div class="price">
+                                <p>{{item.original | currency '￥'}}</p>
+                                <p>{{item.price | currency '￥'}}</p>
+                            </div>
+                            <div class="num">
+                                <button @click="minus($index)">-</button>
+                                <input type="text" :value="item.num" readonly='true'>
+                                <button @click="add($index)">+</button>
+                            </div>
+                            <div class="money">
+                                {{ item.price * item.num | currency '￥' }}
+                            </div>
+                            <div class="control">
+                                <a href="javascript: void(0);" @click='del($index)'>删除</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clear clearfix" >
+                    <div class="left">
+                        <div class="all">
+                            <input type="checkbox" name="name" value="" id="allselect2" @change='selectAll' :checked='check1'>
+                            全选
+                        </div>
+                        <div class="del">
+                            <button type="button" name="button" @click='delall'>删除</button>
+                            <button type="button" name="button" @click="clearAll">清空</button>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <a href="#">去结算</a>
+                        <div class="total-price">
+                            合计(不含运费)：<span> {{total | currency '￥'}}  </span>元
+                        </div>
+                        <div class="select">
+                            已选商品共<span> {{allCount}} </span> 件
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template v-else>
+              <div class="cart-empty">
+            		<div class="message">
+            			<ul>
+        							<li class="txt">购物车空空的哦~，去看看心仪的商品吧~</li>
+        				      <li><a href="http://dongnaoedu.com/" class="ftx-05">去购物&gt;</a></li>
+            			</ul>
+            		</div>
+            	</div>
+            </template>
+        </section>
+    <script src="../plug-in/vue/dist/vue.js" charset="utf-8"></script>
+    <script src="../js/js.js" charset="utf-8"></script>
+    </body>
+</html>
