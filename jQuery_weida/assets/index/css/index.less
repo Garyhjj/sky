@@ -1,0 +1,191 @@
+@headerWidth: 100%;
+@whiteColor: #b13e3e;
+@blackColor: #d5d5d5;
+
+header{
+	width: @headerWidth;
+  position: fixed;
+  top: 0px;
+  z-index: 999;
+	.transitionAll(.5s);
+  &.hide{
+    .transformY(-100%);
+  }
+  .menubar{
+    //白色底的导航样式
+    &.white{
+      height: 74px;
+      border-bottom: 1px solid #d5d0c3;
+      background-color: rgba(255, 255, 255, .8);
+      .brand{
+        .normal{
+          margin-top: 15px;
+        	width: 70%;
+        	display: block;
+        }
+        .black{
+          display: none;
+        }
+      }
+      .menus li{
+        a{
+          line-height: 74px;
+          color: #676767;
+        }
+        &:hover a{
+          color: @whiteColor;
+        	background-color: #eee;
+        }
+      }
+      .oper{
+        line-height: 74px;
+        a{
+          color: @whiteColor;
+        }
+      }
+    }
+    //黑色底导航样式
+    &.black{
+      height: 50px;
+    	border-bottom: 1px solid #6f6657;
+      background-color: rgba(0, 0, 0, .5);
+      .brand{
+        .normal{
+          display: none;
+        }
+        .black{
+          margin-top:5px;
+        	display: block;
+        }
+      }
+      .menus{
+        margin-left: 100px;
+        li{
+          a{
+            line-height: 50px;
+            color: @blackColor;
+          }
+          &:hover a{
+            color: #fff;
+          	background-color: #403b3b;
+          }
+        }
+      }
+      .oper{
+        color: @blackColor;
+        line-height: 50px;
+      	background-size: 15%;
+        a{
+          color: @blackColor;
+        	font-size: 14px;
+        }
+      }
+    }
+    //通用导航样式
+    .container{
+      height:100%;
+    }
+    .brand{
+      float:left;
+    }
+    .menus{
+      float: left;
+      height: 100%;
+      li{
+        float: left;
+        a{
+          padding: 0px 23px;
+          display: block;
+        }
+      }
+    }
+    .oper{
+      float: right;
+    	height: 100%;
+    	font-size: 16px;
+      color: #b13e3e;
+      float: right;
+      width: 170px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 65px;
+      margin-right: 20px;
+      background-size: 18%;
+      background-image: url("../images/user.png");
+      background-position: 10px center;
+      background-repeat: no-repeat;
+      a:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+//内容样式
+body{
+	overflow: hidden;
+}
+.section-wrap{
+  .section{
+    &.section-1{
+      position: relative;
+      .layer{
+        position: absolute;
+      	top: 0;
+      	left: 0;
+      	right: 0;
+      	bottom: 0;
+      }
+    }
+    &.section-2{
+      background-image: url("../images/2.jpg");
+    	position: relative;
+      img{
+				.transitionAll(.7s);
+        &.qx{
+          position: absolute;
+        	bottom: 0;
+        	left: 0;
+          .transformX(-100%);
+        }
+        &.tb{
+          position: absolute;
+        	bottom: 0;
+        	right: 0;
+          .transformX(100%);
+        }
+      }
+      &.action img{
+        .transformX(0%);
+      }
+    }
+    &.section-3{
+      background-image: url("../images/3.jpg");
+    }
+    &.section-4{
+      background-image: url("../images/4.jpg");
+    }
+    &.section-5{
+      background-image: url("../images/5.jpg");
+    }
+  }
+}
+.transformY(@y: 0){
+  transform: translateY(@y);
+	-moz-transform: translateY(@y);
+	-webkit-transform: translateY(@y);
+	-o-transform: translateY(@y);
+}
+.transformX(@x: 0){
+  transform: translateX(@x);
+	-moz-transform: translateX(@x);
+	-webkit-transform: translateX(@x);
+	-o-transform: translateX(@x);
+}
+.transitionAll(@time:1s){
+	transition: all @time cubic-bezier(0.86, 0, 0.03, 1);
+	-moz-transition: all @time cubic-bezier(0.86, 0, 0.03, 1);
+	-webkit-transition: all @time cubic-bezier(0.86, 0, 0.03, 1);
+	-o-transition: all @time cubic-bezier(0.86, 0, 0.03, 1);
+}

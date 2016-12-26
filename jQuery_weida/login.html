@@ -24,14 +24,23 @@
     <img width="150px" src="assets/images/nav-logo.png">
 </a>
 <div class="container">
-    <form id="frmLogin" action="/login" method="post">
+    <form id="frmLogin" action="main.html" method="get">
         <div class="form-title">用户登录</div>
         <div class="form-group form-group-lg">
             <div class="input-group">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-user"></span>
                 </div>
-                <input type="text" class="form-control" id="username" name="loginParam.userNameOrEmailOrPhone" placeholder="用户名" autocomplete="off" value="" maxlength="30" autofocus="" data-bv-notempty="true" data-bv-notempty-message="请输入用户名" data-bv-trigger="blur" data-bv-field="loginParam.userNameOrEmailOrPhone">
+                <input type="text" class="form-control"
+                id="username" name="loginParam.userNameOrEmailOrPhone" placeholder="用户名"
+                autocomplete="off" value=""
+                data-bv-require='true'
+                data-bv-require-message='用户名必须填写'
+                data-bv-regex='^\w+$'
+                data-bv-regex-message='用户名必须是由数字字母下划线所组成'
+                data-bv-betweenl='6-12'
+                data-bv-betweenl-message='用户名长度必须是6-12位之间'
+                >
             </div>
         </div>
 
@@ -40,22 +49,38 @@
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-lock"></span>
                 </div>
-                <input type="password" id="password" class="form-control" name="loginParam.passwd" placeholder="密码" autocomplete="off" maxlength="16" data-bv-notempty="true" data-bv-notempty-message="请输入密码" data-bv-trigger="blur" data-bv-field="loginParam.passwd">
+                <input type="password" id="password" class="form-control"
+                name="loginParam.passwd" placeholder="密码" autocomplete="off"
+                autocomplete="off" value=""
+                data-bv-require='true'
+                data-bv-require-message='密码必须填写'
+                data-bv-regex='^[a-zA-Z0-9]+$'
+                data-bv-regex-message='密码必须是由数字字母所组成'
+                data-bv-minlength='8'
+                data-bv-minlength-message='密码长度不少于8位'
+                data-bv-maxlength='12'
+                data-bv-maxlength-message='密码长度不大于12位'
+                >
             </div>
-            <small class="help-block" data-bv-validator="notEmpty" data-bv-for="loginParam.passwd" data-bv-result="NOT_VALIDATED" style="display: none;">请输入密码</small><small class="help-block" data-bv-validator="stringLength" data-bv-for="loginParam.passwd"
-                data-bv-result="NOT_VALIDATED" style="display: none;">Please enter a value with valid length</small></div>
+          </div>
 
         <div class="form-group form-group-lg">
             <div class="col-sm-8  valid-code">
                 <div class="input-group">
-                    <input type="text" placeholder="验证码" name="loginParam.verifyCode" class="form-control" autocomplete="off" maxlength="4" data-bv-notempty="true" data-bv-notempty-message="请输入验证码" data-bv-trigger="blur" data-bv-remote-name="verifyCode" data-bv-remote-url="/checkVerifyCode"
-                        data-bv-remote-message="验证码错误" data-bv-field="loginParam.verifyCode">
+                    <input type="text" placeholder="验证码" id="verifyCode" name="loginParam.verifyCode"
+                    class="form-control" autocomplete="off"
+                    data-bv-require='true'
+                    data-bv-require-message='验证码必须填写'
+                    data-bv-regex='^[a-zA-Z0-9]+$'
+                    data-bv-regex-message='验证码必须是由数字字母所组成'
+                    data-bv-length='4'
+                    data-bv-length-message='验证码长度必须为4位'
+                    >
                     <div class="input-group-addon">
                         <img id="vc" src="http://www.yunbridge.cn/verifyCode" title="点击重新获取验证码" alt="验证码">
                     </div>
                 </div>
-                <small class="help-block" data-bv-validator="notEmpty" data-bv-for="loginParam.verifyCode" data-bv-result="NOT_VALIDATED" style="display: none;">请输入验证码</small><small class="help-block" data-bv-validator="stringLength" data-bv-for="loginParam.verifyCode"
-                    data-bv-result="NOT_VALIDATED" style="display: none;">Please enter a value with valid length</small></div>
+                </div>
             <div class="col-sm-4">
                 <p class="form-control-static">
                     <a href="#">看不清?换图片</a>
@@ -63,13 +88,14 @@
             </div>
         </div>
         <div class="form-group buttons">
-            <button type="button" class="btn btn-danger btn-block btn-lg update-btn">登录</button>
-            <p><a href="#">用户注册</a>
+            <button type="submit" class="btn btn-danger btn-block btn-lg update-btn">登录</button>
+            <p><a href="regist.html">用户注册</a>
                 <a href="#" class="pull-right">忘记密码？</a></p>
         </div>
     </form>
 </div>
   <script src="assets/plug-in/jquery/jquery-2.2.4.js"></script>
+  <script src="assets/plug-in/bootstrapValidator/js/bootstrapValidator.js"></script>
   <script src="assets/dn-common.js"></script>
   <script src="assets/login/js/index.js"></script>
 </body>
