@@ -95,7 +95,7 @@ body.login {
 .panel.list .table th.order { cursor:pointer; }
 .panel.list .table th .caret { margin-left:5px; }
 .panel.list .table tr .form-control { display:inline; max-width:80px; margin-right:5px; }
-.panel.list .table tr .lazy-load{margin:20px auto;background-color:white;border:1px solid #ddd;padding:10px 50px}
+.panel.list .table tr .lazy-load{margin:20px auto;background-color:white;border:1px solid #ddd;padding:10px 50px;max-width:200px;height:42px}
 .panel.list .table td.money { text-align:right; padding-right:30px;  }
 
 .form-horizontal .form-group { margin-left:0; margin-right:0; position:relative;}

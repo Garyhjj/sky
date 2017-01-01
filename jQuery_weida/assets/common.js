@@ -43,53 +43,68 @@ $(function() {
 var Utils = {
   //金额格式化
   format : function(o, s, n) {
-    var type = $(o).data('format-type');
-    switch(type){
-      case 'money':
-        n = n > 0 && n <= 20 ? n : 2;
-        s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
-        var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1];
-        t = "";
-        for (i = 0; i < l.length; i++) {
-          t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+    if(arguments.length>0){
+      var type = $(o).data('format-type');
+      $(o).removeAttr('data-format-type')
+      switch(type){
+        case 'money':
+          n = n > 0 && n <= 20 ? n : 2;
+          s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+          var l = s.split(".")[0].split("").reverse(), r = s.split(".")[1];
+          t = "";
+          for (i = 0; i < l.length; i++) {
+            t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+          }
+          return t.split("").reverse().join("") + "." + r;
+        case 'integer':
+          return parseInt(s);
+        case 'rate':
+          return (Number(s)*100).toFixed(2);
+        case 'toAcount':
+        var money = s;
+        if (isNaN(money) || money > Math.pow(10, 12))
+            return "";
+        var cn = "零壹贰叁肆伍陆柒捌玖";
+        var unit = new Array("拾百千", "分角");
+        var unit1 = new Array("万亿", "");
+        var numArray = money.toString().split(".");
+        var start = new Array(numArray[0].length - 1, 2);
+        function toChinese(num, index)
+        {
+            num = num.replace(/\d/g, function($1)
+            {
+                return cn.charAt($1) + unit[index].charAt(start-- % 4 ? start % 4 : -1);
+            });
+            return num;
         }
-        return t.split("").reverse().join("") + "." + r;
-      case 'integer':
-        return parseInt(s);
-      case 'rate':
-        return Number(s)*100;
-      case 'toAcount':
-        var str = s;
-        str = str+'';
-        var len = str.length-1;
-        var idxs = ['','十','百','千','万','十','百','千','亿','十','百','千','万','十','百','千','亿'];
-        var num = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
-        return str.replace(/([1-9]|0+)/g,function( $, $1, idx, full) {
-          console.log($1[0]);
-        var pos = 0;
-        if( $1[0] != '0' ){
-         pos = len-idx;
-         if( idx == 0 && $1[0] == 1 && idxs[len-idx] == '十'){
-          return idxs[len-idx];
-         }
-         return num[$1[0]] + idxs[len-idx];
-        } else {
-         var left = len - idx;
-         var right = len - idx + $1.length;
-         if( Math.floor(right/4) - Math.floor(left/4) > 0 ){
-          pos = left - left%4;
-         }
-         if( pos ){
-          return idxs[pos] + num[$1[0]];
-         } else if( idx + $1.length >= len ){
-          return '';
-         }else {
-          return num[$1[0]]
-         }
+        for (var i = 0; i < numArray.length; i++)
+        {
+            var tmp = "";
+            for (var j = 0; j * 4 < numArray[i].length; j++)
+            {
+                var strIndex = numArray[i].length - (j + 1) * 4;
+                var str = numArray[i].substring(strIndex, strIndex + 4);
+                start = i ? 2 : str.length - 1;
+                var tmp1 = toChinese(str, i);
+                tmp1 = tmp1.replace(/(零.)+/g, "零").replace(/零+$/, "");
+                tmp1 = tmp1.replace(/^壹拾/, "拾");
+                tmp = (tmp1 + unit1[i].charAt(j - 1)) + tmp;
+            }
+            numArray[i] = tmp;
         }
-        });
-      default :
-        return s;
+        numArray[1] = numArray[1] ? numArray[1] : "";
+        numArray[0] = numArray[0] ? numArray[0] + "元" : (numArray[0], numArray[1] = numArray[1].replace(/^零+/, ""));
+        numArray[0] = numArray[0].match(/亿万/) ? numArray[0].replace("亿万","亿") : numArray[0];
+        numArray[1] = numArray[1].match(/分/) ? numArray[1] : numArray[1] + "整";
+        return numArray[0] + numArray[1];
+        default :
+          return s;
+    }
+    }else{
+      $('[data-format-type]').each(function(){
+        $(this).text(Utils.format($(this),$(this).text()));
+      })
+
     }
 
   }
