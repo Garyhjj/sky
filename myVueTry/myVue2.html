@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>myVue</title>
+</head>
+
+<body>
+
+    <div class="dfgd">
+        fgh
+    </div>
+    <input oninput="changeInput(event)">
+    <div id="app">
+      <input v-model="message">
+        {{ message }}
+        <br> {{ title }}
+        <br> {{ title }}
+        <span v-bind:title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+        <span v-bind:name="title">
+鼠标悬停几秒钟查看此处动态绑定的提示信息！
+</span>
+    </div>
+    <script>
+        var vmodel = false;
+        function changeInput(event) {
+          vmodel = true
+          app.data = {
+              message: event.target.value,
+              title: 'hey'
+          }
+        }
+        class Vue {
+            constructor(opts) {
+                this.vueData = opts.data
+                this.app = document.querySelector(opts.el);
+                this.vModel = document.querySelectorAll('[v-model]',opts.el)
+                console.log(this.vModel[0].nextSibling);
+                if(this.vModel[0].nextSibling) {
+                  let tempNextNode = this.vModel[0].nextSibling;
+                  this.tempNextHtml = this.tempNextHtml+tempNextNode.outerHTML
+                  while(tempNextNode.nextSibling) {
+                    tempNextNode = tempNextNode.nextSibling;
+                    console.log(tempNextNode.nodeType=== 3);
+                    console.log(tempNextNode.nodeType)
+                    this.tempNextHtml = tempNextNode.nodeType === 3? this.tempNextHtml+tempNextNode.outerHTML:this.tempNextHtml+tempNextNode.innerHTML;
+                    console.log(this.tempNextHtml);
+                  }
+                  this.tempNextHtml = this.tempNextHtml.replace(/undefined/g,'')
+                }
+                this.pre = this.app.previousSibling;
+                this.app2 = this.app.cloneNode();
+                this.html = this.app.innerHTML;
+                this.app2.innerHTML = this.html
+                this.app.parentNode.removeChild(this.app)
+                this.pre.after(this.app)
+                this.change(this.html)
+            }
+            get data() {
+                return this.vueData;
+            }
+            set data(value) {
+                for (let porp in value) {
+                    this.vueData[porp] = value[porp]
+                }
+                this.change(this.html)
+            }
+            change(html1) {
+                this.app.innerHTML = this.changeDetail(html1);
+            }
+            vChange(html){
+            }
+            changeDetail(html1){
+              let html = html1;
+              let regex = /(\{\{\s*([\w]+)\s*\}\})/g;
+              while (regex.exec(html)) {
+                  html = html.replace(new RegExp(RegExp.$1, 'g'), this.vueData[RegExp.$2])
+              }
+              let regex2 = /(v\-bind\:([\w]+)\=\"\s*([\w]+)\s*\")/g;
+              while (regex2.exec(html)) {
+                  html = html.replace(new RegExp(RegExp.$1, 'g'), RegExp.$2 + '="' + this.vueData[RegExp.$3] + '"')
+              }
+              let regex3 = /(v\-model\=\"\s*([\w]+)\s*\")/g;
+              while (regex3.exec(html)) {
+                  html = html.replace(new RegExp(RegExp.$1, 'g'), 'value="'+this.vueData[RegExp.$2]+'"'+' '+'oninput="changeInput(event)"'+' ' )
+              }
+              return html
+            }
+        }
+        let data2 = {
+            message: 'Hello Vue!',
+            title: 'hey'
+        }
+        var app = new Vue({
+            el: '#app',
+            data: data2
+        })
+        let num = 2
+        setInterval(() => {
+            // app.data = {
+            //     message: 'Hello Vue!' + num++,
+            //     title: 'hey'
+            // }
+        }, 1000)
+    </script>
+</body>
+
+</html>
