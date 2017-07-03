@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>myVue</title>
+</head>
+
+<body>
+    <div id="app">
+        {{ message }}
+        <div v-if="isShow" v-bind:readonly="read" v-bind:some="title">
+            hello you see me
+        </div>
+        <input v-model="message" v-bind:readonly="read"> {{ message }}
+        <br> {{ title }}
+        <br> {{ title }}
+        <span v-bind:title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+        <span v-bind:name="title">
+鼠标悬停几秒钟查看此处动态绑定的提示信息！
+</span>
+        <button type="button" name="button" v-on:click="reverseMessage">绑定事件</button>
+        <button type="button" name="button" v-on:click="reverseMessage('dfg',789,title,'789','title')">绑定事件（带参数）</button>
+    </div>
+    <div id="app2">
+        <h1>{{name1}}</h1>
+        <input v-model="name1" v-bind:autofocus="inputFocus">
+        <ul>
+            <li>{{ name1 }}</li>
+        </ul>
+        <button type="button" name="button" v-bind:disabled="enable" v-bind:style="css">hello</button>
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ol>
+    </div>
+    <script src="scripts/myVue2.js">
+    </script>
+    <script>
+        let data2 = {
+            message: 'Hello Vue!',
+            title: 'hey',
+            read: true,
+            some: {
+                name: 'dfg',
+                height: {
+                    size: 170
+                }
+            },
+            isShow: false
+        }
+        var app = new Vue({
+            el: '#app',
+            data: data2,
+            methods: {
+                reverseMessage: function() {
+                  console.log(arguments);
+                    this.message = 'hello click',
+                    this.some.name = 'hihuirt';
+                    this.title = 'yyesdff';
+                }
+            }
+        })
+        setTimeout(() => {
+            data2.message = 'hahahahah';
+            data2.isShow = true;
+        }, 2000)
+        let data3 = {
+            name1: 'gary',
+            css: 'width:60px',
+            enable: true,
+            inputFocus: false,
+            todos: [{
+                text: '学习 JavaScript'
+            }, {
+                text: '学习 Vue'
+            }, {
+                text: '整个牛项目'
+            }]
+        }
+        var app2 = new Vue({
+            el: '#app2',
+            data: data3
+        })
+
+        setTimeout(() => {
+            data3.todos.pop();
+        }, 1000)
+        setTimeout(() => {
+          data3.todos.push({
+              text: '学习 c#'
+          });
+          data3.todos.push({
+              text: '学习 c++'
+          });
+        }, 3000)
+    </script>
+</body>
+
+</html>

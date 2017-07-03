@@ -11,6 +11,8 @@ class Vue {
         if(this.vFor.length>0){
           let parent = this.vFor[0].parentNode;
           this.vParent = parent.cloneNode();
+        }else {
+          this.vParent = '';
         }
         this.pre = this.app.previousSibling;
         this.app2 = this.app.cloneNode();
@@ -92,40 +94,48 @@ class Vue {
             this.vTie = RegExp.$2;
             html = html.replace(new RegExp(RegExp.$1, 'g'), 'value="' + this.vueData[RegExp.$2] + '"' + ' ' + 'data-v');
         }
-        let regex4 = /(v\-for\=\"([\w]+)\s+in\s+([\w]+)\")/g
-        while(regex4.exec(html)){
-          let outTarget = RegExp.$3;
-          let innerTarget = RegExp.$2;
-          let wholeTarget = RegExp.$1
-          // if(!this.first) {
-          //   if(this.vueData[outTarget].length<=this.vParent.children.length){
-          //     console.log(123);
-          //   }
-          // }
-          let parent = this.vFor[0].parentNode;
-          let parentOutHtml = parent.outerHTML;
-          let parentHtml = parent.innerHTML;
-          let fIndex = html.indexOf(parentOutHtml);
-          let preHtml = html.substr(0,fIndex);
-          let afterHtml = html.substr(fIndex + parentOutHtml.length,html.length-1)
-          for(let i = 0;i< this.vueData[outTarget].length-1 ;i++) {
-            parentHtml += this.vFor[0].outerHTML;
-          }
-          parentHtml = parentHtml.replace(new RegExp(wholeTarget, 'g'),'');
-          let regex = /(\{\{\s*([\w]+)\.([\w]+)\s*\}\})/g;
-          let index = 0;
-          while(regex.exec(parentHtml)) {
-            let target = this.vueData[outTarget];
-            if(RegExp.$2 === innerTarget) {
-              parentHtml = parentHtml.replace(RegExp.$1,this.vueData[outTarget][index][RegExp.$3]);
-              index++;
-            }
-            this.vParent.innerHTML = parentHtml;
-          }
-          html = preHtml + this.vParent.outerHTML + afterHtml
-          this.first = false;
-        };
+        let res = this.forRender(html);
+        html = res?res:html;
         return html;
 
+    }
+
+    forRender(html1) {
+      if(!this.vParent) return false;
+      let html = html1
+      let regex4 = /(v\-for\=\"([\w]+)\s+in\s+([\w]+)\")/g
+      if(!this.first) {
+        if(this.vueData[outTarget].length<=this.vParent.children.length){
+          console.log(123);
+        }
+      }
+      while(regex4.exec(html)){
+        let outTarget = RegExp.$3;
+        let innerTarget = RegExp.$2;
+        let wholeTarget = RegExp.$1;
+        let parent = this.vFor[0].parentNode;
+        let parentOutHtml = parent.outerHTML;
+        let parentHtml = parent.innerHTML;
+        let fIndex = html.indexOf(parentOutHtml);
+        let preHtml = html.substr(0,fIndex);
+        let afterHtml = html.substr(fIndex + parentOutHtml.length,html.length-1)
+        for(let i = 0;i< this.vueData[outTarget].length-1 ;i++) {
+          parentHtml += this.vFor[0].outerHTML;
+        }
+        parentHtml = parentHtml.replace(new RegExp(wholeTarget, 'g'),'');
+        let regex = /(\{\{\s*([\w]+)\.([\w]+)\s*\}\})/g;
+        let index = 0;
+        while(regex.exec(parentHtml)) {
+          let target = this.vueData[outTarget];
+          if(RegExp.$2 === innerTarget) {
+            parentHtml = parentHtml.replace(RegExp.$1,this.vueData[outTarget][index][RegExp.$3]);
+            index++;
+          }
+          this.vParent.innerHTML = parentHtml;
+        }
+        html = preHtml + this.vParent.outerHTML + afterHtml
+        this.first = false;
+        return html;
+      };
     }
 }
