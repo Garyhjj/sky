@@ -37,12 +37,10 @@ var BasicChartComponent = (function () {
         var _this = this;
         this.basicTodo = this.initWork();
         this.titleChange();
-        console.log(this.basicTodo);
         this.basicTodo.controls['series_l'].valueChanges.subscribe(function (value) {
             _this.changeSeries(value);
         });
         this.basicTodo.controls['colors'].valueChanges.subscribe(function (val) {
-            console.log(val);
             _this.getDetail({
                 type: 100,
                 detail: {
@@ -81,7 +79,7 @@ var BasicChartComponent = (function () {
         this.basicTodo.controls['series_l'].setValue('1');
     };
     BasicChartComponent.prototype.changeDetail = function (option) {
-        this.myChart.setOption(option);
+        this.myChart && this.myChart.setOption(option);
     };
     BasicChartComponent.prototype.getDetail = function (del) {
         var option = this.getOption();
