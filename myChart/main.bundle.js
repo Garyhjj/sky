@@ -37,12 +37,10 @@ var BasicChartComponent = (function () {
         var _this = this;
         this.basicTodo = this.initWork();
         this.titleChange();
-        console.log(this.basicTodo);
         this.basicTodo.controls['series_l'].valueChanges.subscribe(function (value) {
             _this.changeSeries(value);
         });
         this.basicTodo.controls['colors'].valueChanges.subscribe(function (val) {
-            console.log(val);
             _this.getDetail({
                 type: 100,
                 detail: {
@@ -76,15 +74,24 @@ var BasicChartComponent = (function () {
     BasicChartComponent.prototype.isDoubleY = function (e) {
         this._isDoubleY = e.target.checked;
     };
+    BasicChartComponent.prototype.isRoseType = function (e) {
+        this._isRoseType = e.target.checked;
+        this.getDetail({
+            type: 97, detail: {
+                roseType: this._isRoseType
+            }
+        });
+    };
     BasicChartComponent.prototype.isPie = function (e) {
         this._isPie = e.target.checked;
-        this.basicTodo.controls['series_l'].setValue('1');
     };
     BasicChartComponent.prototype.changeDetail = function (option) {
-        this.myChart.setOption(option);
+        this.myChart && this.myChart.setOption(option);
     };
     BasicChartComponent.prototype.getDetail = function (del) {
         var option = this.getOption();
+        if (!option)
+            return;
         switch (del.type) {
             case 0:
                 _a = [option.xAxis, option.yAxis], option.yAxis = _a[0], option.xAxis = _a[1];
@@ -118,6 +125,12 @@ var BasicChartComponent = (function () {
                         Object.assign(option.yAxis[1], del.detail);
                     }
                 }
+                break;
+            case 11:
+                Object.assign(option.series[0], del.detail);
+                break;
+            case 97:
+                option.series[0] = del.detail;
                 break;
             case 98:
                 option.yAxis[1] = del.detail;
@@ -184,6 +197,7 @@ var BasicChartComponent = (function () {
             this.myOption = this.initNotPie(title, legend_data, xAxis_data, color);
             this.myChart = this.chartService.makeChart('main1', this.myOption);
         }
+        console.log(this.myChart);
     };
     BasicChartComponent.prototype.initNotPie = function (title, legend_data, xAxis_data, color) {
         var series = [];
@@ -221,11 +235,11 @@ var BasicChartComponent = (function () {
         var allData = [];
         for (var i = 0; i < this.basicTodo.controls['series'].length; i++) {
             var tempSeries = this.basicTodo.controls['series'].controls[i];
-            allData = tempSeries.value.split(',');
-            allData = allData.map(function (value, index) {
-                return { value: value, name: legend_data[index] };
-            });
+            allData.push(Number(tempSeries.value));
         }
+        allData = allData.map(function (value, index) {
+            return { value: value, name: legend_data[index] };
+        });
         var option = this.chartService.initPieChart(title, {
             legend_data: legend_data,
             series: [{
@@ -233,6 +247,9 @@ var BasicChartComponent = (function () {
                 }]
         });
         option.color = color;
+        if (this.isRoseType) {
+            option.series[0].roseType = true;
+        }
         return option;
     };
     BasicChartComponent.prototype.titleChange = function () {
@@ -327,8 +344,8 @@ __decorate([
 BasicChartComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-basic-chart',
-        template: __webpack_require__(550),
-        styles: [__webpack_require__(547)]
+        template: __webpack_require__(551),
+        styles: [__webpack_require__(548)]
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */]) === "function" && _b || Object])
 ], BasicChartComponent);
@@ -380,6 +397,12 @@ var DetailDefineComponent = (function () {
         }
         this.detailTodo = this.initWork();
         this.signSubscribe();
+        // this.chartSub = this.chartService.chartTerms.subscribe((val) =>{
+        //
+        // })
+    };
+    DetailDefineComponent.prototype.ngOnDestroy = function () {
+        this.chartSub.unsubscribe();
     };
     DetailDefineComponent.prototype.signSubscribe = function () {
         this.switchChange();
@@ -396,6 +419,8 @@ var DetailDefineComponent = (function () {
         this.xAxisLabel_rotateChange();
         this.yAxisLabel1_rotateChange();
         this.yAxisLabel2_rotateChange();
+        this.pie_positionChange();
+        this.pie_radiusChange();
     };
     //初始化原始數據
     DetailDefineComponent.prototype.initWork = function (work) {
@@ -415,6 +440,8 @@ var DetailDefineComponent = (function () {
             xAxisLabel_rotate: [0, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             yAxisLabel1_rotate: [0, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             yAxisLabel2_rotate: [0, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
+            pie_position: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
+            pie_radius: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
         });
     };
     DetailDefineComponent.prototype.switchChange = function () {
@@ -633,6 +660,30 @@ var DetailDefineComponent = (function () {
             });
         });
     };
+    DetailDefineComponent.prototype.pie_positionChange = function () {
+        var _this = this;
+        this.detailTodo.controls['pie_position'].valueChanges.subscribe(function (val) {
+            var arr = val.split(',');
+            _this.changeDetail.emit({
+                type: 11,
+                detail: {
+                    center: [arr.length > 1 && arr[1] ? arr[1] + '%' : '50%', arr[0] + '%'],
+                }
+            });
+        });
+    };
+    DetailDefineComponent.prototype.pie_radiusChange = function () {
+        var _this = this;
+        this.detailTodo.controls['pie_radius'].valueChanges.subscribe(function (val) {
+            var arr = val.split(',');
+            _this.changeDetail.emit({
+                type: 11,
+                detail: {
+                    radius: [arr.length > 1 && arr[1] ? arr[1] + '%' : '0%', arr[0] + '%'],
+                }
+            });
+        });
+    };
     DetailDefineComponent.prototype.makePosition = function (data) {
         var position = {};
         if (data.length > 1) {
@@ -651,14 +702,22 @@ var DetailDefineComponent = (function () {
     return DetailDefineComponent;
 }());
 __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Input */])(),
+    __metadata("design:type", Boolean)
+], DetailDefineComponent.prototype, "isDoubleY", void 0);
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Input */])(),
+    __metadata("design:type", Boolean)
+], DetailDefineComponent.prototype, "isPie", void 0);
+__decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* Output */])(),
     __metadata("design:type", Object)
 ], DetailDefineComponent.prototype, "changeDetail", void 0);
 DetailDefineComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-detail-define',
-        template: __webpack_require__(551),
-        styles: [__webpack_require__(548)]
+        template: __webpack_require__(552),
+        styles: [__webpack_require__(549)]
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */]) === "function" && _b || Object])
 ], DetailDefineComponent);
@@ -690,7 +749,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(242);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(246);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(247);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(248);
 
 
 
@@ -767,8 +826,8 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-root',
-        template: __webpack_require__(549),
-        styles: [__webpack_require__(546)]
+        template: __webpack_require__(550),
+        styles: [__webpack_require__(547)]
     })
 ], AppComponent);
 
@@ -780,7 +839,7 @@ AppComponent = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(241);
@@ -789,6 +848,7 @@ AppComponent = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__basic_chart_basic_chart_component__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__detail_define_detail_define_component__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_chart_service__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_directive_Bmap_directive__ = __webpack_require__(247);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -796,6 +856,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -815,14 +876,15 @@ AppModule = __decorate([
         declarations: [
             __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_6__basic_chart_basic_chart_component__["a" /* BasicChartComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__detail_define_detail_define_component__["a" /* DetailDefineComponent */]
+            __WEBPACK_IMPORTED_MODULE_7__detail_define_detail_define_component__["a" /* DetailDefineComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__shared_directive_Bmap_directive__["a" /* MyBMapDirective */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_4__app_routing__["a" /* AppRoutingModule */]
+            __WEBPACK_IMPORTED_MODULE_4__app_routing__["a" /* AppRoutingModule */],
         ],
         providers: [__WEBPACK_IMPORTED_MODULE_8__shared_service_chart_service__["a" /* ChartService */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
@@ -834,6 +896,90 @@ AppModule = __decorate([
 /***/ }),
 
 /***/ 247:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyBMapDirective; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var MyBMapDirective = (function () {
+    function MyBMapDirective(el) {
+        this.el = el;
+    }
+    MyBMapDirective.prototype.ngAfterViewInit = function () {
+        window['initBaidu'] = this.initBaidu;
+        window['myEl'] = this;
+        if (document.querySelector('script[baiduM]')) {
+            this.initBaidu();
+        }
+        else {
+            this.loadJScript();
+        }
+    };
+    MyBMapDirective.prototype.loadJScript = function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.setAttribute('baiduM', '1');
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=rECGU9AZLOa1SkguIO1UvN08de7kECrL&callback=initBaidu";
+        document.body.appendChild(script);
+    };
+    MyBMapDirective.prototype.initBaidu = function () {
+        var _this = window['myEl'];
+        var BMap = window['BMap'];
+        var opts = { offset: new BMap.Size(100, 20) };
+        var map = new BMap.Map(_this.el.nativeElement); // 创建地图实例
+        map.addControl(new BMap.NavigationControl());
+        map.addControl(new BMap.ScaleControl(opts));
+        map.addControl(new BMap.OverviewMapControl());
+        map.addControl(new BMap.MapTypeControl());
+        map.addControl(new BMap.GeolocationControl());
+        map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
+        map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
+        var point = new ((_a = BMap.Point).bind.apply(_a, [void 0].concat(_this.pos)))(); // 创建点坐标
+        map.centerAndZoom(point, 20); // 初始化地图，设置中心点坐标和地图级别
+        var _a;
+        //      var geolocation = new BMap.Geolocation();  //实例化浏览器定位对象。
+        //      console.log(geolocation)
+        //  //下面是getCurrentPosition方法。调用该对象的getCurrentPosition()，与HTML5不同的是，这个方法原型是getCurrentPosition(callback:function[, options: PositionOptions])，也就是说无论成功与否都执行回调函数1，第二个参数是关于位置的选项。 因此能否定位成功需要在回调函数1中自己判断。
+        // geolocation.getCurrentPosition(function(r){   //定位结果对象会传递给r变量
+        //     // if(this.getStatus() == 'BMAP_STATUS_SUCCESS'){  //通过Geolocation类的getStatus()可以判断是否成功定位。
+        //     //     var mk = new BMap.Marker(r.point);    //基于定位的这个点的点位创建marker
+        //     //     map.addOverlay(mk);    //将marker作为覆盖物添加到map地图上
+        //     //     map.panTo(r.point);   //将地图中心点移动到定位的这个点位置。注意是r.point而不是r对象。
+        //     //     alert('您的位置：'+r.point.lng+','+r.point.lat);  //r对象的point属性也是一个对象，这个对象的lng属性表示经度，lat属性表示纬度。
+        //     // }
+        //     // else {
+        //     //     alert('failed'+this.getStatus());
+        //     // }
+        //     console.log(r)
+        // },{enableHighAccuracy: true})
+    };
+    return MyBMapDirective;
+}());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Input */])(),
+    __metadata("design:type", Array)
+], MyBMapDirective.prototype, "pos", void 0);
+MyBMapDirective = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["j" /* Directive */])({ selector: '[myBMap]' }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* ElementRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* ElementRef */]) === "function" && _a || Object])
+], MyBMapDirective);
+
+var _a;
+//# sourceMappingURL=Bmap.directive.js.map
+
+/***/ }),
+
+/***/ 248:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -850,10 +996,10 @@ var environment = {
 
 /***/ }),
 
-/***/ 546:
+/***/ 547:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(61)();
+exports = module.exports = __webpack_require__(62)();
 // imports
 
 
@@ -868,10 +1014,10 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 547:
+/***/ 548:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(61)();
+exports = module.exports = __webpack_require__(62)();
 // imports
 
 
@@ -886,10 +1032,10 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 548:
+/***/ 549:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(61)();
+exports = module.exports = __webpack_require__(62)();
 // imports
 
 
@@ -904,28 +1050,28 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 549:
+/***/ 550:
 /***/ (function(module, exports) {
 
 module.exports = "<nav class=\"navbar navbar-default\" role=\"navigation\">\r\n  <div class=\"container-fluid\">\r\n    <!-- Brand and toggle get grouped for better mobile display -->\r\n    <div class=\"navbar-header\">\r\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n        <span class=\"sr-only\">Toggle navigation</span>\r\n        <span class=\"icon-bar\"></span>\r\n        <span class=\"icon-bar\"></span>\r\n        <span class=\"icon-bar\"></span>\r\n      </button>\r\n      <a class=\"navbar-brand\" href=\"#\">报表设计</a>\r\n    </div>\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n<ul class=\"nav nav-tabs\">\r\n  <li role=\"presentation\" routerLinkActive='active' ><a routerLink=\"basic\">基本表格</a></li>\r\n  <!-- <li role=\"presentation\" routerLinkActive='active' ><a routerLink=\"detail\">细节</a></li> -->\r\n</ul>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ }),
 
-/***/ 550:
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"row box\">\r\n  <div class=\"col-xs-5\">\r\n    <ul class=\"nav nav-tabs\">\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 0 \"><a (click)=\"showWhere = 0\">基本定义</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 1 \"><a (click)=\"showWhere = 1\">细节操作</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 2 \"><a (click)=\"getOption();showWhere = 2\">代码操作</a></li>\r\n    </ul>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 2\">\r\n      <button type=\"button\" class=\"btn btn-default\" (click)=\"showOption()\">输出配置到控制台</button>\r\n      <div class=\"form-group\">\r\n        <label for=\"title\">配置内容</label>\r\n        <textarea class=\"form-control\" rows=\"40\" [value] =\"myOption | json \" #code1 (input)=\"dealCode(code1.value)\"></textarea>\r\n      </div>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 1\">\r\n      <app-detail-define (changeDetail)=\"getDetail($event)\"></app-detail-define>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 0\">\r\n      <div class=\"row\">\r\n        <div class=\"col-xs-3\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" (change) =\"isPie($event)\">\r\n          饼图\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"isDoubleY($event)\">\r\n          双纵坐标\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"firstAdd($event)\">\r\n          第一纵坐标加%\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie && _isDoubleY\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"secondAdd($event)\">\r\n          第二纵坐标加%\r\n          </label>\r\n        </div>\r\n      </div>\r\n\r\n      <form [formGroup]=\"basicTodo\" *ngIf=\"basicTodo\" class=\"myForm\">\r\n        <div class=\"form-group\" *ngIf=\"!_isPie\">\r\n          <label for=\"unit\">数据系列数</label>\r\n          <select class=\"form-control\" id=\"unit\" formControlName=\"series_l\">\r\n          <option *ngFor=\"let item of items\" [value]=\"item\">{{item}}</option>\r\n        </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"title\">图表名称</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"title\" placeholder=\"\" formControlName=\"title\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"legend_data\">数据类名</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"legend_data\" placeholder=\"类名之间请用英文逗号分开\" formControlName=\"legend_data\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"xAxis_data\">横坐标名称或饼图数据名称</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"xAxis_data\" placeholder=\"\" formControlName=\"xAxis_data\">\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"col-xs-5\">\r\n            <div formArrayName=\"series\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['series'].controls; let i = index;\">\r\n                <label [for]=\"'series'+i\">{{i===0 && _isPie?'数据':'数据类名'+(i+1)+'数据'}}</label>\r\n                <input type=\"text\" class=\"form-control\" [id]=\"'series'+i\" placeholder=\"数据之间请用英文逗号分开\" [formControlName]=\"i\">\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n            <div formArrayName=\"seriesType\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['seriesType'].controls; let i = index;\">\r\n                <label [for]=\"'seriesType'+i\">图表类型</label>\r\n                <select class=\"form-control\" [id]=\"'series'+i\" [formControlName]=\"i\">\r\n              <option  value=\"bar\">柱状图</option>\r\n              <option  value=\"line\">折线图</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\" *ngIf=\"!_isPie && _isDoubleY\">\r\n            <div formArrayName=\"yAxisIndex\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['yAxisIndex'].controls; let i = index;\">\r\n                <label [for]=\"'yAxisIndex'+i\">所属纵坐标</label>\r\n                <select class=\"form-control\" [id]=\"'yAxisIndex'+i\" [formControlName]=\"i\">\r\n              <option  value=\"0\">左边</option>\r\n              <option  value=\"1\">右边</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\">\r\n            <div formArrayName=\"colors\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['colors'].controls; let i = index;\">\r\n                <label [for]=\"'colors'+i\">颜色</label>\r\n                <input class=\"form-control\" type=\"color\" name=\"favcolor\" [formControlName]=\"i\"/>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">重置并绘图</button>\r\n      </form>\r\n    </div>\r\n    </div>\r\n  <div class=\"col-xs-7\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-6 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"type\">手机型号</label>\r\n          <select class=\"form-control\" id=\"type\" value=\"736*414\" #youPhone (change)=\"selectPhone(youPhone.value);changeSize(size,point.checked)\">\r\n            <option  value=\"736*414\">iphone6 Plus</option>\r\n            <option  value=\"1024*768\">ipad</option>\r\n            <option  value=\"667*375\">iphone6</option>\r\n            <option  value=\"568*320\">iphone5</option>\r\n            <option  value=\"480*320\">iphone4</option>\r\n            <option  value=\"1280*800\">Nexus 10</option>\r\n            <option  value=\"731*411\">Nexus 5X</option>\r\n            <option  value=\"773*435\">Nexus 6P</option>\r\n            <option  value=\"640*360\">Galaxy Note 3</option>\r\n            <option  value=\"640*360\">Galaxy S5</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-xs-2 form-inline\">\r\n        <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" #point (change)=\"changeSize(size,point.checked)\">\r\n          横屏\r\n        </label>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-5 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"l*w\">长*宽</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"l*w\" placeholder=\"736*414\" value=\"736*414\" #size>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-xs-2\">\r\n        <input class=\"btn btn-default\" type=\"button\" value=\"自定义确定\" (click)=\"changeSize(size,point.checked)\">\r\n      </div>\r\n    </div>\r\n    <div class=\"chartOut\" #phone>\r\n      <div id=\"main1\" class=\"chart\" *ngIf=\"!_isPie\"></div>\r\n      <div id=\"main2\" class=\"chart\" *ngIf=\"_isPie\"></div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
-
-/***/ }),
-
 /***/ 551:
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"\">\r\n    <label>\r\n    <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\" >\r\n    纵横坐标交换\r\n    </label>\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"title_position\">标题位置</label>\r\n    <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"title_fontSize\">标题字体大小</label>\r\n    <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n    <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n  </select>\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"legend_orient\">类名排列方法</label>\r\n    <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n  <option  value=\"horizontal\">水平</option>\r\n  <option  value=\"vertical\">垂直</option>\r\n</select>\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"legend_position\">类名位置</label>\r\n    <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"legend_fontSize\">类名字体大小</label>\r\n    <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n    <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n  </select>\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"grid_position\">图表位置</label>\r\n    <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n    placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"grid_height\">图表高度</label>\r\n    <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n    <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n  </select>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
+module.exports = "<div class=\"row box\">\r\n  <div class=\"col-xs-5\">\r\n    <ul class=\"nav nav-tabs\">\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 0 \"><a (click)=\"showWhere = 0\">基本定义</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 1 \"><a (click)=\"showWhere = 1\">细节操作</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 2 \"><a (click)=\"getOption();showWhere = 2\">代码操作</a></li>\r\n    </ul>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 2\">\r\n      <button type=\"button\" class=\"btn btn-default\" (click)=\"showOption()\">输出配置到控制台</button>\r\n      <div class=\"form-group\">\r\n        <label for=\"title\">配置内容</label>\r\n        <textarea class=\"form-control\" rows=\"40\" [value] =\"myOption | json \" #code1 (input)=\"dealCode(code1.value)\"></textarea>\r\n      </div>\r\n      <div class=\"chart\" myBMap [pos]=\"[113.13402564, 23.03509484]\">\r\n\r\n      </div>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 1\">\r\n      <app-detail-define (changeDetail)=\"getDetail($event)\" [isDoubleY]=\"_isDoubleY\" [isPie]=\"_isPie\"></app-detail-define>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 0\">\r\n      <div class=\"row\">\r\n        <div class=\"col-xs-3\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" (change) =\"isPie($event)\">\r\n          饼图\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"isRoseType($event)\">\r\n          南丁格尔图\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"isDoubleY($event)\">\r\n          双纵坐标\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"firstAdd($event)\">\r\n          第一纵坐标加%\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie && _isDoubleY\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"secondAdd($event)\">\r\n          第二纵坐标加%\r\n          </label>\r\n        </div>\r\n      </div>\r\n\r\n      <form [formGroup]=\"basicTodo\" *ngIf=\"basicTodo\" class=\"myForm\">\r\n        <div class=\"form-group\">\r\n          <label for=\"unit\">数据系列数</label>\r\n          <select class=\"form-control\" id=\"unit\" formControlName=\"series_l\">\r\n          <option *ngFor=\"let item of items\" [value]=\"item\">{{item}}</option>\r\n        </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"title\">图表名称</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"title\" placeholder=\"\" formControlName=\"title\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"legend_data\">数据类名</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"legend_data\" placeholder=\"类名之间请用英文逗号分开\" formControlName=\"legend_data\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"xAxis_data\">{{_isPie?'数据名称':'横坐标名称'}}</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"xAxis_data\" [placeholder]=\"_isPie?'':'数据之间请用英文逗号分开'\" formControlName=\"xAxis_data\">\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"col-xs-5\">\r\n            <div formArrayName=\"series\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['series'].controls; let i = index;\">\r\n                <label [for]=\"'series'+i\">数据类名{{i+1}}数据</label>\r\n                <input type=\"text\" class=\"form-control\" [id]=\"'series'+i\" [placeholder]=\"_isPie?'':'数据之间请用英文逗号分开'\" [formControlName]=\"i\">\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n            <div formArrayName=\"seriesType\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['seriesType'].controls; let i = index;\">\r\n                <label [for]=\"'seriesType'+i\">图表类型</label>\r\n                <select class=\"form-control\" [id]=\"'series'+i\" [formControlName]=\"i\">\r\n              <option  value=\"bar\">柱状图</option>\r\n              <option  value=\"line\">折线图</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\" *ngIf=\"!_isPie && _isDoubleY\">\r\n            <div formArrayName=\"yAxisIndex\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['yAxisIndex'].controls; let i = index;\">\r\n                <label [for]=\"'yAxisIndex'+i\">所属纵坐标</label>\r\n                <select class=\"form-control\" [id]=\"'yAxisIndex'+i\" [formControlName]=\"i\">\r\n              <option  value=\"0\">左边</option>\r\n              <option  value=\"1\">右边</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\">\r\n            <div formArrayName=\"colors\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['colors'].controls; let i = index;\">\r\n                <label [for]=\"'colors'+i\">颜色</label>\r\n                <input class=\"form-control\" type=\"color\" name=\"favcolor\" [formControlName]=\"i\"/>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">重置并绘图</button>\r\n      </form>\r\n    </div>\r\n    </div>\r\n  <div class=\"col-xs-7\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-6 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"type\">手机型号</label>\r\n          <select class=\"form-control\" id=\"type\" value=\"736*414\" #youPhone (change)=\"selectPhone(youPhone.value);changeSize(size,point.checked)\">\r\n            <option  value=\"736*414\">iphone6 Plus</option>\r\n            <option  value=\"1024*768\">ipad</option>\r\n            <option  value=\"667*375\">iphone6</option>\r\n            <option  value=\"568*320\">iphone5</option>\r\n            <option  value=\"480*320\">iphone4</option>\r\n            <option  value=\"1280*800\">Nexus 10</option>\r\n            <option  value=\"731*411\">Nexus 5X</option>\r\n            <option  value=\"773*435\">Nexus 6P</option>\r\n            <option  value=\"640*360\">Galaxy Note 3</option>\r\n            <option  value=\"640*360\">Galaxy S5</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-xs-2 form-inline\">\r\n        <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" #point (change)=\"changeSize(size,point.checked)\">\r\n          横屏\r\n        </label>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-5 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"l*w\">长*宽</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"l*w\" placeholder=\"736*414\" value=\"736*414\" #size>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-xs-2\">\r\n        <input class=\"btn btn-default\" type=\"button\" value=\"自定义确定\" (click)=\"changeSize(size,point.checked)\">\r\n      </div>\r\n    </div>\r\n    <div class=\"chartOut\" #phone>\r\n      <div id=\"main1\" class=\"chart\" *ngIf=\"!_isPie\"></div>\r\n      <div id=\"main2\" class=\"chart\" *ngIf=\"_isPie\"></div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ 615:
+/***/ 552:
+/***/ (function(module, exports) {
+
+module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"\" *ngIf=\"!isPie\">\r\n    <label>\r\n    <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\" >\r\n    纵横坐标交换\r\n    </label>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_position\">标题位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_fontSize\">标题字体大小</label>\r\n      <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_orient\">类名排列方法</label>\r\n      <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n    <option  value=\"horizontal\">水平</option>\r\n    <option  value=\"vertical\">垂直</option>\r\n  </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_position\">类名位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_fontSize\">类名字体大小</label>\r\n      <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"pie_position\">饼图位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"pie_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"pie_radius\">饼图外内圆半径</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_radius\" placeholder=\"10,10 外,内距离,输入0-100\" formControlName=\"pie_radius\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_position\" >图表位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n      placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_height\" >图表高度</label>\r\n      <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n      <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie && isDoubleY\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
+
+/***/ }),
+
+/***/ 616:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(237);
@@ -938,8 +1084,10 @@ module.exports = __webpack_require__(237);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts__ = __webpack_require__(301);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts__ = __webpack_require__(302);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_echarts__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChartService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -952,8 +1100,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var ChartService = (function () {
     function ChartService() {
+        this.chartTerms = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
         this.fontFamily = ['Helvetica', 'Tahoma', 'Arial', 'STXihei', '华文细黑', 'Microsoft YaHei', '微软雅黑', 'sans-serif'];
         this.colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
     }
@@ -1049,7 +1199,7 @@ var ChartService = (function () {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
         };
-        mySeries[0].center = ['50%', '60%'];
+        // mySeries[0].center =['50%','60%'];
         var option = {
             title: {
                 text: title,
@@ -1156,5 +1306,5 @@ ChartService = __decorate([
 
 /***/ })
 
-},[615]);
+},[616]);
 //# sourceMappingURL=main.bundle.js.map
