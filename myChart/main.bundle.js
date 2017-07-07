@@ -396,7 +396,17 @@ var BasicChartComponent = (function () {
         return del;
     };
     BasicChartComponent.prototype.showOption = function () {
-        console.log(JSON.stringify(this.isScale ? this.myOption : this.myOption.baseOption));
+        if (this.isScale) {
+            console.log(this.myOption);
+        }
+        else {
+            if (this.myOption.baseOption) {
+                console.log(this.myOption.baseOption);
+            }
+            else {
+                console.log(this.myOption);
+            }
+        }
     };
     return BasicChartComponent;
 }());
