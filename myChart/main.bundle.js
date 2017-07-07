@@ -30,6 +30,7 @@ var BasicChartComponent = (function () {
             reasonType: '34456'
         };
         this.hasSwich = false;
+        this.isScale = false;
         this.myOption = '';
         this.colors = this.chartService.colors;
     }
@@ -133,6 +134,7 @@ var BasicChartComponent = (function () {
                 Object.assign(option.series[0], del.detail);
                 break;
             case 12:
+                this.isScale = del.detail;
                 if (del.detail) {
                     var query = [
                         {
@@ -394,7 +396,7 @@ var BasicChartComponent = (function () {
         return del;
     };
     BasicChartComponent.prototype.showOption = function () {
-        console.log(JSON.stringify(this.myOption));
+        console.log(JSON.stringify(this.isScale ? this.myOption : this.myOption.baseOption));
     };
     return BasicChartComponent;
 }());
