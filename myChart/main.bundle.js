@@ -87,11 +87,14 @@ var BasicChartComponent = (function () {
     };
     BasicChartComponent.prototype.changeDetail = function (option) {
         this.myChart && this.myChart.setOption(option);
+        this.myOption = option;
     };
     BasicChartComponent.prototype.getDetail = function (del) {
-        var option = this.getOption();
-        if (!option)
+        var optionAll = this.getOption();
+        if (!optionAll)
             return;
+        var option = optionAll.baseOption ? optionAll.baseOption : optionAll;
+        var media = optionAll.media ? optionAll.media : [];
         switch (del.type) {
             case 0:
                 _a = [option.xAxis, option.yAxis], option.yAxis = _a[0], option.xAxis = _a[1];
@@ -129,6 +132,59 @@ var BasicChartComponent = (function () {
             case 11:
                 Object.assign(option.series[0], del.detail);
                 break;
+            case 12:
+                if (del.detail) {
+                    var query = [
+                        {
+                            query: {
+                                maxWidth: 2560,
+                            },
+                            option: {
+                                dataZoom: [{
+                                        type: 'inside',
+                                        disabled: true,
+                                        start: 1,
+                                        end: 100
+                                    }]
+                            }
+                        },
+                        {
+                            query: {
+                                maxWidth: 420,
+                            },
+                            option: {
+                                dataZoom: [{
+                                        type: 'inside',
+                                        disabled: false,
+                                        xAxisIndex: [0],
+                                        start: 1,
+                                        end: 35
+                                    }]
+                            }
+                        }
+                    ];
+                    media = media.concat(query);
+                }
+                else {
+                    var query = [
+                        {
+                            query: {
+                                maxWidth: 420,
+                            },
+                            option: {
+                                dataZoom: [{
+                                        type: 'inside',
+                                        disabled: true,
+                                        xAxisIndex: [0],
+                                        start: 1,
+                                        end: 100
+                                    }]
+                            }
+                        }
+                    ];
+                    media = media.concat(query);
+                }
+                break;
             case 97:
                 option.series[0] = del.detail;
                 break;
@@ -142,7 +198,16 @@ var BasicChartComponent = (function () {
                 Object.assign(option, del.detail);
                 break;
         }
-        this.changeDetail(option);
+        if (media.length > 0) {
+            optionAll = {
+                baseOption: option,
+                media: media
+            };
+        }
+        else {
+            optionAll = option;
+        }
+        this.changeDetail(optionAll);
         var _a;
     };
     BasicChartComponent.prototype.changeSeries = function (value) {
@@ -421,12 +486,14 @@ var DetailDefineComponent = (function () {
         this.yAxisLabel2_rotateChange();
         this.pie_positionChange();
         this.pie_radiusChange();
+        this.scaleChange();
     };
     //初始化原始數據
     DetailDefineComponent.prototype.initWork = function (work) {
         if (work === void 0) { work = {}; }
         return this.formBuilder.group({
             switch: [false, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
+            scale: [false, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             title_position: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             title_fontSize: [18, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             legend_orient: ['horizontal', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
@@ -681,6 +748,15 @@ var DetailDefineComponent = (function () {
                 detail: {
                     radius: [arr.length > 1 && arr[1] ? arr[1] + '%' : '0%', arr[0] + '%'],
                 }
+            });
+        });
+    };
+    DetailDefineComponent.prototype.scaleChange = function () {
+        var _this = this;
+        this.detailTodo.controls['scale'].valueChanges.subscribe(function (val) {
+            _this.changeDetail.emit({
+                type: 12,
+                detail: val
             });
         });
     };
@@ -1067,7 +1143,7 @@ module.exports = "<div class=\"row box\">\r\n  <div class=\"col-xs-5\">\r\n    <
 /***/ 552:
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"\" *ngIf=\"!isPie\">\r\n    <label>\r\n    <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\" >\r\n    纵横坐标交换\r\n    </label>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_position\">标题位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_fontSize\">标题字体大小</label>\r\n      <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_orient\">类名排列方法</label>\r\n      <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n    <option  value=\"horizontal\">水平</option>\r\n    <option  value=\"vertical\">垂直</option>\r\n  </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_position\">类名位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_fontSize\">类名字体大小</label>\r\n      <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"pie_position\">饼图位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"pie_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"pie_radius\">饼图外内圆半径</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_radius\" placeholder=\"10,10 外,内距离,输入0-100\" formControlName=\"pie_radius\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_position\" >图表位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n      placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_height\" >图表高度</label>\r\n      <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n      <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie && isDoubleY\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
+module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-3\" *ngIf=\"!isPie\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\" >\r\n      纵横坐标交换\r\n      </label>\r\n    </div>\r\n    <div class=\"col-xs-3\" *ngIf=\"!isPie\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkbox\" formControlName=\"scale\" >\r\n      竖屏时启动放大功能\r\n      </label>\r\n    </div>\r\n  </div>\r\n\r\n\r\n\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_position\">标题位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_fontSize\">标题字体大小</label>\r\n      <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_orient\">类名排列方法</label>\r\n      <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n    <option  value=\"horizontal\">水平</option>\r\n    <option  value=\"vertical\">垂直</option>\r\n  </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_position\">类名位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_fontSize\">类名字体大小</label>\r\n      <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_position\">饼图位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"pie_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_radius\">饼图外内圆半径</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_radius\" placeholder=\"10,10 外,内距离,输入0-100\" formControlName=\"pie_radius\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_position\" >图表位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n      placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_height\" >图表高度</label>\r\n      <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n      <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie && isDoubleY\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
 
 /***/ }),
 
