@@ -188,13 +188,13 @@ var BasicChartComponent = (function () {
                 }
                 break;
             case 97:
-                option.series[0] = del.detail;
+                Object.assign(option.series[0], del.detail);
                 break;
             case 98:
-                option.yAxis[1] = del.detail;
+                Object.assign(option.yAxis[1], del.detail);
                 break;
             case 99:
-                option.yAxis[0] = del.detail;
+                Object.assign(option.yAxis[0], del.detail);
                 break;
             default:
                 Object.assign(option, del.detail);
