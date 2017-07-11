@@ -398,13 +398,16 @@ var BasicChartComponent = (function () {
     BasicChartComponent.prototype.showOption = function () {
         if (this.isScale) {
             console.log(JSON.stringify(this.myOption));
+            console.log(this.myOption);
         }
         else {
             if (this.myOption.baseOption) {
                 console.log(JSON.stringify(this.myOption.baseOption));
+                console.log(this.myOption.baseOption);
             }
             else {
                 console.log(JSON.stringify(this.myOption));
+                console.log(this.myOption);
             }
         }
     };
