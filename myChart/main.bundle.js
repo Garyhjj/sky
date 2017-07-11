@@ -397,14 +397,14 @@ var BasicChartComponent = (function () {
     };
     BasicChartComponent.prototype.showOption = function () {
         if (this.isScale) {
-            console.log(this.myOption);
+            console.log(JSON.stringify(this.myOption));
         }
         else {
             if (this.myOption.baseOption) {
-                console.log(this.myOption.baseOption);
+                console.log(JSON.stringify(this.myOption.baseOption));
             }
             else {
-                console.log(this.myOption);
+                console.log(JSON.stringify(this.myOption));
             }
         }
     };
