@@ -342,7 +342,11 @@ var BasicChartComponent = (function () {
         });
         option2.color = color;
         if (!this._isDoubleY) {
-            option2.yAxis = [{ type: 'value' }];
+            option2.yAxis = [{ type: 'value', splitLine: {
+                        lineStyle: {
+                            color: '#000'
+                        }
+                    } }];
         }
         if (this.hasSwich) {
             _a = [option2.xAxis, option2.yAxis], option2.yAxis = _a[0], option2.xAxis = _a[1];
@@ -1078,6 +1082,9 @@ var MyBMapDirective = (function () {
         script.type = "text/javascript";
         script.setAttribute('baiduM', '1');
         script.src = "https://api.map.baidu.com/api?v=2.0&ak=rECGU9AZLOa1SkguIO1UvN08de7kECrL&callback=initBaidu";
+        // script.onload = () => {
+        //   console.log(778899)
+        // }
         document.body.appendChild(script);
     };
     MyBMapDirective.prototype.initBaidu = function () {
@@ -1399,6 +1406,8 @@ var ChartService = (function () {
                 textStyle: {}
             },
             grid: {
+                show: true,
+                backgroundColor: '#c0c0c0',
                 containLabel: true
             },
             xAxis: [
@@ -1419,6 +1428,11 @@ var ChartService = (function () {
                     boundaryGap: [0.2, 0.2],
                     nameTextStyle: {
                         fontSize: 14
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#000'
+                        }
                     }
                 },
                 {
