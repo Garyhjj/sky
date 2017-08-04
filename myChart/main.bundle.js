@@ -4,7 +4,7 @@ webpackJsonp([1,4],{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(94);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BasicChartComponent; });
@@ -289,15 +289,15 @@ var BasicChartComponent = (function () {
         else {
             this.myOption = this.initNotPie(title, legend_data, xAxis_data, color);
             this.myChart = this.chartService.makeChart('main1', this.myOption);
+            this.firstAdd(this.percentAdd1);
+            if (this._isDoubleY) {
+                this.secondAdd(this.percentAdd2);
+            }
+            this.myChart.on('click', function (item) {
+                console.log(item);
+                _this.showItemColor(item);
+            });
         }
-        this.firstAdd(this.percentAdd1);
-        if (this._isDoubleY) {
-            this.secondAdd(this.percentAdd2);
-        }
-        this.myChart.on('click', function (item) {
-            console.log(item);
-            _this.showItemColor(item);
-        });
         console.log(this.myChart);
     };
     BasicChartComponent.prototype.showItemColor = function (item) {
@@ -371,7 +371,7 @@ var BasicChartComponent = (function () {
                 }]
         });
         option.color = color;
-        if (this.isRoseType) {
+        if (this._isRoseType) {
             option.series[0].roseType = true;
         }
         return option;
@@ -485,8 +485,8 @@ __decorate([
 BasicChartComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-basic-chart',
-        template: __webpack_require__(551),
-        styles: [__webpack_require__(548)]
+        template: __webpack_require__(552),
+        styles: [__webpack_require__(549)]
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */]) === "function" && _b || Object])
 ], BasicChartComponent);
@@ -500,9 +500,10 @@ var _a, _b;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_service_ng_validator_extend_service__ = __webpack_require__(146);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DetailDefineComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -516,10 +517,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+var MyValidator = function () {
+    function test(ctrl) {
+        console.log(ctrl);
+    }
+    // let value = ctrl.value;
+    // if(value.indexOf('Will') != -1) {
+    //   return null;
+    // } else {
+    //   return {
+    //     'must-have-will': true
+    //   };
+    // }
+};
 var DetailDefineComponent = (function () {
-    function DetailDefineComponent(chartService, formBuilder) {
+    function DetailDefineComponent(chartService, formBuilder, validExd) {
         this.chartService = chartService;
         this.formBuilder = formBuilder;
+        this.validExd = validExd;
         this.changeDetail = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* EventEmitter */]();
         this.fontSize = [];
         this.myHeight = [];
@@ -570,7 +586,7 @@ var DetailDefineComponent = (function () {
         return this.formBuilder.group({
             switch: [false, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             scale: [false, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
-            title_position: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
+            title_position: ['', [__WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required]],
             title_fontSize: [18, __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             legend_orient: ['horizontal', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
             legend_position: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* Validators */].required],
@@ -868,18 +884,319 @@ __decorate([
 DetailDefineComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-detail-define',
-        template: __webpack_require__(552),
-        styles: [__webpack_require__(549)]
+        template: __webpack_require__(553),
+        styles: [__webpack_require__(550)]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__shared_service_chart_service__["a" /* ChartService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* FormBuilder */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__shared_service_ng_validator_extend_service__["a" /* NgValidatorExtendService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__shared_service_ng_validator_extend_service__["a" /* NgValidatorExtendService */]) === "function" && _c || Object])
 ], DetailDefineComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=detail-define.component.js.map
 
 /***/ }),
 
-/***/ 236:
+/***/ 146:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgValidatorExtendService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var NgValidatorExtendService = (function () {
+    function NgValidatorExtendService() {
+        /*
+          扩展说明
+         */
+        this.description = {
+            version: '0.01',
+            name: 'ngValidatorExtend.js',
+            author: 'gary.h'
+        };
+    }
+    /**
+     * [required 必须填]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.required = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return value ? null : {
+                'required': true
+            };
+        };
+    };
+    /**
+     * [minLength 字符串最小长度]
+     * @param  {number}   num [description]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.minLength = function (num) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            var valueL = value.length;
+            return (valueL >= num) ? null : {
+                'minlength': {
+                    'requiredLength': num,
+                    'actualLength': valueL
+                }
+            };
+        };
+    };
+    /**
+     * [maxLength 字符串最大长度]
+     * @param  {number}   num [description]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.maxLength = function (num) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            var valueL = value.length;
+            return (valueL <= num) ? null : {
+                'maxlength': {
+                    'requiredLength': num,
+                    'actualLength': valueL
+                }
+            };
+        };
+    };
+    /**
+     * [max 限制最大数值]
+     * @param  {number}   num [description]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.max = function (num) {
+        return function (ctrl) {
+            var value = Number(ctrl.value);
+            return (value <= num) ? null : {
+                'max': {
+                    'requiredValue': num,
+                    'actualValue': value
+                }
+            };
+        };
+    };
+    /**
+     * [min 限制最小数值]
+     * @param  {number}   num [description]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.min = function (num) {
+        return function (ctrl) {
+            var value = Number(ctrl.value);
+            return (value >= num) ? null : {
+                'min': {
+                    'requiredValue': num,
+                    'actualValue': value
+                }
+            };
+        };
+    };
+    /**
+     * [betweenLength 限制字符串长度的范围]
+     * @param  {number[]} bet [长度为2]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.betweenLength = function (bet) {
+        if (bet instanceof Array && bet.length > 1) {
+            return function (ctrl) {
+                var value = ctrl.value;
+                var valueL = value.length;
+                return (valueL >= bet[0] && valueL <= bet[1]) ? null : { 'betweenLength': {
+                        'requiredLength': bet[0] + '-' + bet[1], 'actualLength': valueL
+                    } };
+            };
+        }
+        else {
+            throw new Error('参数必须是数组类型,并且长度不能小于1');
+        }
+    };
+    /**
+     * [regex 根据输入的正则验证]
+     * @param  {any}    reg [正则表达式]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.regex = function (reg) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            var regx = new RegExp(reg);
+            return regx.test(value) ? null : {
+                'RegExp': regx.toString()
+            };
+        };
+    };
+    /**
+     * [email 检测是否为邮箱]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.email = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return /^([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-]*)*\@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])*/.test(value) ? null : {
+                'email': true
+            };
+        };
+    };
+    /**
+     * [length 长度限制]
+     * @param  {number}   length [description]
+     * @return {Function}        [验证器]
+     */
+    NgValidatorExtendService.prototype.length = function (length) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            var valueL = value.length;
+            return valueL === Number(length) ? null : {
+                'length': {
+                    'requiredLength': Number(length), 'actualLength': valueL
+                }
+            };
+        };
+    };
+    /**
+     * [between 限制数值最大最小值]
+     * @param  {number[]} bet [description]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.between = function (bet) {
+        if (bet instanceof Array && bet.length > 1) {
+            return function (ctrl) {
+                var value = Number(ctrl.value);
+                return (value >= bet[0] && value <= bet[1]) ? null : { 'between': {
+                        'requiredValue': bet[0] + '-' + bet[1], 'actualValue': value
+                    } };
+            };
+        }
+        else {
+            throw new Error('参数必须是数组类型,并且长度不能小于1');
+        }
+    };
+    /**
+     * [integer 为整数]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.integer = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return /^\-?\d+$/.test(value) ? null : {
+                'integer': true
+            };
+        };
+    };
+    /**
+     * [number 为数字]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.number = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return !isNaN(Number(value)) ? null : {
+                'number': true
+            };
+        };
+    };
+    /**
+     * [mobile 为移动号码]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.mobile = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return /^1\d{10}$/.test(value) ? null : {
+                'mobile': true
+            };
+        };
+    };
+    /**
+     * [telephone 为固话号码]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.telephone = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return /^\d{4}\-\d{8}$/.test(value) ? null : {
+                'telephone': true
+            };
+        };
+    };
+    /**
+     * [url 为网址]
+     * @return {Function} [验证器]
+     */
+    NgValidatorExtendService.prototype.url = function () {
+        return function (ctrl) {
+            var value = ctrl.value;
+            return /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/g.test(value) ? null : {
+                'url': true
+            };
+        };
+    };
+    /**
+     * [equalTo 与同级栏位进行内容对比，是否相等]
+     * @param  {string}   name [同级栏位名称]
+     * @return {Function}      [验证器]
+     */
+    NgValidatorExtendService.prototype.equalTo = function (name) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            if (!ctrl.parent)
+                return null;
+            if (!ctrl.parent.controls[name])
+                throw new Error('同级栏位中没有' + name + '栏位');
+            var anotherVal = ctrl.parent.controls[name].value || null;
+            return (anotherVal && value == anotherVal) ? null : {
+                'equalTo': {
+                    'target': name
+                }
+            };
+        };
+    };
+    /**
+     * [toFix 检查小数位的个数]
+     * @param  {number} num [小数位的个数]
+     * @return {Function}     [description]
+     */
+    NgValidatorExtendService.prototype.toFix = function (num) {
+        return function (ctrl) {
+            var value = ctrl.value;
+            var reg = '^([\\d]+)(\\.[\\d]{' + Number(num) + '})?$';
+            return new RegExp(reg).test(value) ? null : {
+                'toFix': true
+            };
+        };
+    };
+    /**
+     * [selfDefine 自定位验证规则]
+     * @param  {Function} fn  [自定义的规则函数，参数（ctrl,opt）]
+     * @param  {any}      opt [自定义参数]
+     * @return {Function}     [验证器]
+     */
+    NgValidatorExtendService.prototype.selfDefine = function (fn, opt) {
+        var _this = this;
+        return function (ctrl) {
+            fn.call(_this, ctrl, opt);
+        };
+    };
+    return NgValidatorExtendService;
+}());
+NgValidatorExtendService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(),
+    __metadata("design:paramtypes", [])
+], NgValidatorExtendService);
+
+//# sourceMappingURL=ng-validator-extend.service.js.map
+
+/***/ }),
+
+/***/ 237:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -888,20 +1205,20 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 236;
+webpackEmptyContext.id = 237;
 
 
 /***/ }),
 
-/***/ 237:
+/***/ 238:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(242);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(246);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(247);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(249);
 
 
 
@@ -914,12 +1231,12 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 
 /***/ }),
 
-/***/ 244:
+/***/ 245:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(243);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(244);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__basic_chart_basic_chart_component__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__detail_define_detail_define_component__ = __webpack_require__(145);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
@@ -956,11 +1273,11 @@ AppRoutingModule = __decorate([
 
 /***/ }),
 
-/***/ 245:
+/***/ 246:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -978,8 +1295,8 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* Component */])({
         selector: 'app-root',
-        template: __webpack_require__(550),
-        styles: [__webpack_require__(547)]
+        template: __webpack_require__(551),
+        styles: [__webpack_require__(548)]
     })
 ], AppComponent);
 
@@ -987,20 +1304,21 @@ AppComponent = __decorate([
 
 /***/ }),
 
-/***/ 246:
+/***/ 247:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(241);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_routing__ = __webpack_require__(244);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(242);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_routing__ = __webpack_require__(245);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__basic_chart_basic_chart_component__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__detail_define_detail_define_component__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_service_chart_service__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_directive_Bmap_directive__ = __webpack_require__(247);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__shared_directive_Bmap_directive__ = __webpack_require__(248);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__shared_service_ng_validator_extend_service__ = __webpack_require__(146);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1008,6 +1326,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -1038,7 +1357,7 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__angular_http__["a" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_4__app_routing__["a" /* AppRoutingModule */],
         ],
-        providers: [__WEBPACK_IMPORTED_MODULE_8__shared_service_chart_service__["a" /* ChartService */]],
+        providers: [__WEBPACK_IMPORTED_MODULE_8__shared_service_chart_service__["a" /* ChartService */], __WEBPACK_IMPORTED_MODULE_10__shared_service_ng_validator_extend_service__["a" /* NgValidatorExtendService */]],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
@@ -1047,11 +1366,11 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 247:
+/***/ 248:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyBMapDirective; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1134,7 +1453,7 @@ var _a;
 
 /***/ }),
 
-/***/ 248:
+/***/ 249:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1151,7 +1470,7 @@ var environment = {
 
 /***/ }),
 
-/***/ 547:
+/***/ 548:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(62)();
@@ -1169,7 +1488,7 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 548:
+/***/ 549:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(62)();
@@ -1187,7 +1506,7 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 549:
+/***/ 550:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(62)();
@@ -1205,31 +1524,31 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ 550:
+/***/ 551:
 /***/ (function(module, exports) {
 
 module.exports = "<nav class=\"navbar navbar-default\" role=\"navigation\">\r\n  <div class=\"container-fluid\">\r\n    <!-- Brand and toggle get grouped for better mobile display -->\r\n    <div class=\"navbar-header\">\r\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n        <span class=\"sr-only\">Toggle navigation</span>\r\n        <span class=\"icon-bar\"></span>\r\n        <span class=\"icon-bar\"></span>\r\n        <span class=\"icon-bar\"></span>\r\n      </button>\r\n      <a class=\"navbar-brand\" href=\"#\">报表设计</a>\r\n    </div>\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n<ul class=\"nav nav-tabs\">\r\n  <li role=\"presentation\" routerLinkActive='active' ><a routerLink=\"basic\">基本表格</a></li>\r\n  <!-- <li role=\"presentation\" routerLinkActive='active' ><a routerLink=\"detail\">细节</a></li> -->\r\n</ul>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ }),
 
-/***/ 551:
+/***/ 552:
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"row box\">\r\n  <div class=\"col-xs-5\">\r\n    <ul class=\"nav nav-tabs\">\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 0 \"><a (click)=\"showWhere = 0\">基本定义</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 1 \"><a (click)=\"showWhere = 1\">细节操作</a></li>\r\n      <li role=\"presentation\" [class.active]=\"showWhere === 2 \"><a (click)=\"getOption();showWhere = 2\">代码操作</a></li>\r\n    </ul>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 2\">\r\n      <div class=\"row\">\r\n        <div class=\"col-xs-4\"><button type=\"button\" class=\"btn btn-default\" (click)=\"showOption()\">输出配置到控制台</button></div>\r\n        <div class=\"col-xs-3\"><button type=\"button\" class=\"btn btn-default\" (click)=\"reDraw()\">用配置重新绘图</button></div>\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"title\">配置内容</label>\r\n        <textarea class=\"form-control\" rows=\"40\" [value] =\"myOption | json \" #code1 (input)=\"dealCode(code1.value)\"></textarea>\r\n      </div>\r\n      <div class=\"chart\" myBMap [pos]=\"[113.13402564, 23.03509484]\">\r\n\r\n      </div>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 1\">\r\n      <app-detail-define (changeDetail)=\"getDetail($event)\" [isDoubleY]=\"_isDoubleY\" [isPie]=\"_isPie\"></app-detail-define>\r\n    </div>\r\n    <div class=\"hide\" [class.show]=\"showWhere == 0\">\r\n      <div class=\"row\">\r\n        <div class=\"col-xs-3\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" (change) =\"isPie($event)\">\r\n          饼图\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"isRoseType($event)\">\r\n          南丁格尔图\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"isDoubleY($event)\">\r\n          双纵坐标\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"percentAdd1=!percentAdd1;firstAdd(percentAdd1)\">\r\n          第一纵坐标加%\r\n          </label>\r\n        </div>\r\n        <div class=\"col-xs-3\" *ngIf=\"!_isPie && _isDoubleY\">\r\n          <label>\r\n          <input type=\"checkbox\" id=\"checkbox\" value=\"1\" (change) =\"percentAdd2=!percentAdd2;secondAdd(percentAdd2)\">\r\n          第二纵坐标加%\r\n          </label>\r\n        </div>\r\n      </div>\r\n\r\n      <form [formGroup]=\"basicTodo\" *ngIf=\"basicTodo\" class=\"myForm\">\r\n        <div class=\"form-group\">\r\n          <label for=\"unit\">数据系列数</label>\r\n          <select class=\"form-control\" id=\"unit\" formControlName=\"series_l\">\r\n          <option *ngFor=\"let item of items\" [value]=\"item\">{{item}}</option>\r\n        </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"title\">图表名称</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"title\" placeholder=\"\" formControlName=\"title\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"legend_data\">数据类名</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"legend_data\" placeholder=\"类名之间请用英文逗号分开\" formControlName=\"legend_data\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"xAxis_data\">{{_isPie?'数据名称':'横坐标名称'}}</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"xAxis_data\" [placeholder]=\"_isPie?'':'数据之间请用英文逗号分开'\" formControlName=\"xAxis_data\">\r\n        </div>\r\n        <div class=\"row\">\r\n          <div class=\"col-xs-5\">\r\n            <div formArrayName=\"series\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['series'].controls; let i = index;\">\r\n                <label [for]=\"'series'+i\">数据类名{{i+1}}数据</label>\r\n                <input type=\"text\" class=\"form-control\" [id]=\"'series'+i\" [placeholder]=\"_isPie?'':'数据之间请用英文逗号分开'\" [formControlName]=\"i\">\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-3\" *ngIf=\"!_isPie\">\r\n            <div formArrayName=\"seriesType\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['seriesType'].controls; let i = index;\">\r\n                <label [for]=\"'seriesType'+i\">图表类型</label>\r\n                <select class=\"form-control\" [id]=\"'series'+i\" [formControlName]=\"i\">\r\n              <option  value=\"bar\">柱状图</option>\r\n              <option  value=\"line\">折线图</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\" *ngIf=\"!_isPie && _isDoubleY\">\r\n            <div formArrayName=\"yAxisIndex\" >\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['yAxisIndex'].controls; let i = index;\">\r\n                <label [for]=\"'yAxisIndex'+i\">所属纵坐标</label>\r\n                <select class=\"form-control\" [id]=\"'yAxisIndex'+i\" [formControlName]=\"i\">\r\n              <option  value=\"0\">左边</option>\r\n              <option  value=\"1\">右边</option>\r\n            </select>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"col-xs-2\">\r\n            <div formArrayName=\"colors\">\r\n              <div class=\"form-group\" *ngFor=\"let ctrl of basicTodo.controls['colors'].controls; let i = index;\">\r\n                <label [for]=\"'colors'+i\">颜色</label>\r\n                <input class=\"form-control\" type=\"color\" name=\"favcolor\" [formControlName]=\"i\"/>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">重置并绘图</button>\r\n      </form>\r\n    </div>\r\n    </div>\r\n  <div class=\"col-xs-7\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-3 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"type\">手机型号</label>\r\n          <select class=\"form-control\" id=\"type\" value=\"736*414\" #youPhone (change)=\"selectPhone(youPhone.value);changeSize(size,point.checked)\">\r\n            <option  value=\"736*414\">iphone6 Plus</option>\r\n            <option  value=\"1024*768\">ipad</option>\r\n            <option  value=\"667*375\">iphone6</option>\r\n            <option  value=\"568*320\">iphone5</option>\r\n            <option  value=\"480*320\">iphone4</option>\r\n            <option  value=\"1280*800\">Nexus 10</option>\r\n            <option  value=\"731*411\">Nexus 5X</option>\r\n            <option  value=\"773*435\">Nexus 6P</option>\r\n            <option  value=\"640*360\">Galaxy Note 3</option>\r\n            <option  value=\"640*360\">Galaxy S5</option>\r\n          </select>\r\n        </div>\r\n      </div>\r\n      <div class=\"col-xs-2 form-inline\">\r\n        <label>\r\n          <input type=\"checkbox\" id=\"checkboxSuccess\" value=\"1\" #point (change)=\"changeSize(size,point.checked)\">\r\n          横屏\r\n        </label>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-3 form-inline\">\r\n        <div class=\"form-group\">\r\n          <label for=\"l*w\">长*宽</label>\r\n          <input type=\"text\" class=\"form-control\" id=\"l*w\" placeholder=\"736*414\" value=\"736*414\" #size (input)=\"changeSize(size,point.checked)\">\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"chartOut\" #phone>\r\n      <div id=\"main1\" class=\"chart\" *ngIf=\"!_isPie\"></div>\r\n      <div id=\"main2\" class=\"chart\" *ngIf=\"_isPie\"></div>\r\n      <div class=\"row\">\r\n        <div class=\"col-xs-5\" *ngIf=\"itemColor\">\r\n          <label for=\"itemColor\">{{itemName}}</label>\r\n          <input class=\"form-control\" type=\"color\" id=\"itemColor\" name=\"favcolor\" [(ngModel)]=\"itemColor\" (change)=\"changeItemColor()\"/>\r\n        </div>\r\n      </div>\r\n      <div *ngIf=\"myChart\" style=\"text-align:center;color:red\">\r\n        ps:点击数据能个性化改变对应的颜色\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ 552:
+/***/ 553:
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-3\" *ngIf=\"!isPie && !isDoubleY\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\">\r\n      纵横坐标交换\r\n      </label>\r\n    </div>\r\n    <div class=\"col-xs-5\" *ngIf=\"!isPie\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkbox\" formControlName=\"scale\" >\r\n      竖屏时启动放大功能\r\n      </label>\r\n    </div>\r\n  </div>\r\n\r\n\r\n\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_position\">标题位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_fontSize\">标题字体大小</label>\r\n      <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_orient\">类名排列方法</label>\r\n      <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n    <option  value=\"horizontal\">水平</option>\r\n    <option  value=\"vertical\">垂直</option>\r\n  </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_position\">类名位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_fontSize\">类名字体大小</label>\r\n      <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_position\">饼图位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"pie_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_radius\">饼图外内圆半径</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_radius\" placeholder=\"10,10 外,内距离,输入0-100\" formControlName=\"pie_radius\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_position\" >图表位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n      placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_height\" >图表高度</label>\r\n      <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n      <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie && isDoubleY\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
+module.exports = "<form [formGroup]=\"detailTodo\" *ngIf=\"detailTodo\" class=\"myForm\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-3\" *ngIf=\"!isPie && !isDoubleY\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkboxSuccess\" formControlName=\"switch\">\r\n      纵横坐标交换\r\n      </label>\r\n    </div>\r\n    <div class=\"col-xs-5\" *ngIf=\"!isPie\">\r\n      <label>\r\n      <input type=\"checkbox\" id=\"checkbox\" formControlName=\"scale\" >\r\n      竖屏时启动放大功能\r\n      </label>\r\n    </div>\r\n  </div>\r\n\r\n\r\n\r\n  <div class=\"row\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_position\">标题位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"title_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"title_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"title_fontSize\">标题字体大小</label>\r\n      <select class=\"form-control\" id=\"title_fontSize\" formControlName=\"title_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <!-- <pre>{{ detailTodo.get('title_position').errors | json }}</pre> -->\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_orient\">类名排列方法</label>\r\n      <select class=\"form-control\" id=\"legend_orient\" formControlName=\"legend_orient\">\r\n    <option  value=\"horizontal\">水平</option>\r\n    <option  value=\"vertical\">垂直</option>\r\n  </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_position\">类名位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"legend_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"legend_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-4\">\r\n      <label for=\"legend_fontSize\">类名字体大小</label>\r\n      <select class=\"form-control\" id=\"legend_fontSize\" formControlName=\"legend_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_position\">饼图位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_position\" placeholder=\"10,10 上,左距离,输入0-100\" formControlName=\"pie_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"isPie\">\r\n      <label for=\"pie_radius\">饼图外内圆半径</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"pie_radius\" placeholder=\"10,10 外,内距离,输入0-100\" formControlName=\"pie_radius\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_position\" >图表位置</label>\r\n      <input type=\"text\" class=\"form-control\" id=\"grid_position\"\r\n      placeholder=\"10,10,10,10 上,左,下,右距离,输入0-100\" formControlName=\"grid_position\">\r\n    </div>\r\n    <div class=\"form-group col-xs-6\" *ngIf=\"!isPie\">\r\n      <label for=\"grid_height\" >图表高度</label>\r\n      <select class=\"form-control\" id=\"grid_height\" formControlName=\"grid_height\">\r\n      <option *ngFor=\"let item of myHeight\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_fontSize\">横坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_fontSize\" formControlName=\"xAxisLabel_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"xAxisLabel_rotate\">横坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"xAxisLabel_rotate\" formControlName=\"xAxisLabel_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_fontSize\">第一纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_fontSize\" formControlName=\"yAxisLabel1_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel1_rotate\">第一纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel1_rotate\" formControlName=\"yAxisLabel1_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n  <div class=\"row\" *ngIf=\"!isPie && isDoubleY\">\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_fontSize\">第二纵坐标字体大小</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_fontSize\" formControlName=\"yAxisLabel2_fontSize\">\r\n      <option *ngFor=\"let item of fontSize\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n    <div class=\"form-group col-xs-6\">\r\n      <label for=\"yAxisLabel2_rotate\">第二纵坐标字体倾斜度</label>\r\n      <select class=\"form-control\" id=\"yAxisLabel2_rotate\" formControlName=\"yAxisLabel2_rotate\">\r\n      <option *ngFor=\"let item of myRotate\" [value]=\"item\">{{item}}</option>\r\n    </select>\r\n    </div>\r\n  </div>\r\n\r\n  <!-- <button type=\"submit\" class=\"btn btn-default\" (click)=\"initBasic()\">画图</button> -->\r\n</form>\r\n"
 
 /***/ }),
 
-/***/ 616:
+/***/ 617:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(237);
+module.exports = __webpack_require__(238);
 
 
 /***/ }),
@@ -1238,8 +1557,8 @@ module.exports = __webpack_require__(237);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts__ = __webpack_require__(302);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_echarts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_echarts__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
@@ -1468,5 +1787,5 @@ ChartService = __decorate([
 
 /***/ })
 
-},[616]);
+},[617]);
 //# sourceMappingURL=main.bundle.js.map
