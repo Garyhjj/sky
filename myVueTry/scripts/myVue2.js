@@ -1,3 +1,33 @@
+function _new(){
+  if(arguments.length === 0 ) throw new Error('no arguments');
+  target = Array.prototype.shift.call(arguments);
+  if(!(target instanceof Function)) throw new Error('Uncaught TypeError: '+ target + ' is not a constructor(…)');
+  var self= {};
+  target.apply(self, arguments);
+  if (target.prototype instanceof Object) {
+    self.__proto__ = target.prototype;
+  };
+  return self;
+};
+
+function hi(a,b) {
+  this.a =a;
+  this.b = b;
+}
+hi.prototyp=3;
+
+var hh = _new(hi,6,7);
+var hh0 = _new(hi,3);
+console.log(hh);
+console.log(hh instanceof hi);
+// hh0.gets = function() {
+//   console.log(777);
+// }
+var hh2 = new hi(4);
+console.log(hh2);
+console.log(hh0);
+// hh.gets();
+// hh0.gets();
 class Vue {
     constructor(opts) {
         this.$data = opts.data;

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                <a class="navbar-brand" href="/">我的相册</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/up">上传 <span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email" name="name">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputFile">File input</label>
+            <input type="file" id="choose" name="file">
+            <p class="help-block">注意文件大小</p>
+        </div>
+        <button type="submit" class="btn btn-default" id="submit">Submit</button>
+    </form>
+</body>
+<script>
+    window.onload = function() {
+        console.log(submit);
+        submit.disabled = true;
+        var filechooser = document.getElementById("choose");
+        filechooser.onchange = function() {
+            console.log(this.files);
+            let p = document.querySelector('p.help-block');
+            let btn = document.querySelector('#submit');
+            if(this.files.length ===0){
+                p.textContent = '注意文件大小'
+                btn.disabled = !!1;
+            };
+            let size = (this.files[0].size/1024).toFixed(2);
+            if(size > 1024) {
+                p.textContent = '文件大小为'+ size+'kb'+',已经超过了1M的大小';
+                btn.disabled = !!1;
+            } else {
+                p.textContent = '文件大小为'+ size+'kb'
+                btn.disabled = !!0;
+            }
+            
+        }
+    }
+    
+</script>
+</html>

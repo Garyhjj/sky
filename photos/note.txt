@@ -1,0 +1,10 @@
+app.js：入口文件
+controller：控制台
+views:资源文件（jade、ejs）
+modles：处理业务逻辑
+uploads：上传目录的文件夹
+public：公共资源，img、css
+node_modules：模块依赖文件夹
+
+
+
