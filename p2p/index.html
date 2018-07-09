@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>利率:
+        <input type="number" / id="rate">
+    </div>
+    <div>连续投的金额:
+        <input type="number" / id="m">
+    </div>
+    <div>连续投的年数:
+        <input type="number" / id="years">
+    </div>
+
+    <div style="font-size: 18px; margin-top: 16px" id="content">
+
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        console.log(years)
+        if (years) {
+            years.addEventListener('input', cal);
+        }
+        if (rate) {
+            rate.addEventListener('input', cal);
+        }
+        if (m) {
+            m.addEventListener('input', cal);
+        }
+
+        function cal() {
+            const y = years ? +years.value : 0;
+            const r = rate ? +rate.value : 0;
+            const m1 = m ? +m.value : 0;
+            let all = 0;
+            if (y && r && m1) {
+                for (var i = 1; i <= y; i++) {
+                    all += Math.pow((1 + r / 100), i) * m1
+                }
+
+                content.innerHTML = `利率${r}%,每年投${m1}元,则在${y}年后的总金额为${all}元`;
+            }
+        }
+    }
+</script>
+
+</html>
