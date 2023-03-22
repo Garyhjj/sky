@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+console.log(import.meta.env)
 const router = createRouter({
-  history: createWebHistory('/sky/life/dist1'),
+  history: createWebHistory(import.meta.env.BASE_URL || '/sky/life/dist'),
   routes: [
     {
       path: '/',
